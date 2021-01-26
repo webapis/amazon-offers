@@ -72,15 +72,18 @@
 5. Question: How can you run actor with Puppeteer in a headful (non-headless) mode?
 
 - Answer:
-  - First option: `const browser = await Apify.launchPuppeteer({ headless: false })` (Synchronous run)
+  - First option:  (Synchronous run)
+  ```
+  const browser = await Apify.launchPuppeteer({ headless: false })
+
+  ```
   - Second option:
-   ```
-   const crawler = new Apify.PuppeteerCrawler({ 
+  
+   ``` const crawler = new Apify.PuppeteerCrawler({ 
     launchPuppeteerOptions: {
     headless: false
     } 
     })
-
     ```
 
 6. Question: Imagine the server/instance the container is running on has a 32 GB, 8-core CPU.What would be the most performant (speed/cost)
