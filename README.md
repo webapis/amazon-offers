@@ -48,8 +48,8 @@
 
 - Answer:
 
-  - First option: - on Apify app  from actor's detail page, Under source tab, below Developer console, select options tab.
-  - Secod option: - on Apify app  from actor's task detail page under setting tab.
+  - First option: - on Apify app from actor's detail page, Under source tab, below Developer console, select options tab.
+  - Secod option: - on Apify app from actor's task detail page under setting tab.
 
          Note: And I think memory allocation to an actor also should be possible from Apify API enpoint. But I have not exlored Apify API  fully yet.
 
@@ -72,21 +72,24 @@
 5. Question: How can you run actor with Puppeteer in a headful (non-headless) mode?
 
 - Answer:
-  - First option:  (Synchronous run)
+
+  - First option: (Synchronous run)
+
   ```
   const browser = await Apify.launchPuppeteer({ headless: false })
 
   ```
+
   - Second option:
 
-   ``` 
-   const crawler = new Apify.PuppeteerCrawler({ 
-    launchPuppeteerOptions: {
-    headless: false
-    } 
-    })
+  ```
+  const crawler = new Apify.PuppeteerCrawler({
+   launchPuppeteerOptions: {
+   headless: false
+   }
+   })
 
-    ```
+  ```
 
 6. Question: Imagine the server/instance the container is running on has a 32 GB, 8-core CPU.What would be the most performant (speed/cost)
    memory allocation for CheerioCrawler? (Hint: Nodejs process cannot user user created thread)
