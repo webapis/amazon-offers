@@ -48,14 +48,25 @@
 
 - Answer:
 
-  - First option: - on Apify app from actor's detail page, Under source tab, below Developer console, select options tab.
-  - Secod option: - on Apify app from actor's task detail page under setting tab.
+  1. First option (by setting actor run options):
 
-         Note: And I think memory allocation to an actor also should be possible from Apify API enpoint. But I have not exlored Apify API  fully yet.
+     1. Navigate to Apify app dashboard;
+     2. Select an actor and navigate to actor's detail page;
+     3. Under source tab, below Developer console, select options tab.
+     4. from there you can set timeout, memory or CPU.
+
+  2. Second option(by setting task run options):
+
+     1. Navigate to Apify app dashboard;
+     2. Select a task of a specific actor and navigate to it's detail page;
+     3. navigate to setting tab;
+     4. from there you can set timeout, memory or CPU.
+
+     Note: And I think memory allocation to an actor also should be possible from Apify API enpoint. But I have not exlored Apify API fully yet.
 
 2. Question: How can you get exact time when the actor was started from within the running actor process?
 
-- Answer: By accessing `process.env.APIFY_STARTED_AT` environment valiable
+- Answer: By accessing `process.env.APIFY_STARTED_AT` environment variable you can get exact time when the actor was started.
 
 3. Which are the default storages an actor run is allocated (connected to)?
 
