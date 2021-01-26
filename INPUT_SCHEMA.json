@@ -1,12 +1,12 @@
 {
-  "title": "Input schema for the apify/quick-start actor.",
+  "title": "Input schema for the apify/amazon-offer actor.",
   "type": "object",
   "schemaVersion": 1,
   "properties": {
-    "message": {
-      "title": "Message",
+    "keyword": {
+      "title": "Keyword",
       "type": "string",
-      "description": "Just enter your hello world message.",
+      "description": "Enter the keyword for the phone",
       "editor": "textfield"
     }
   },
