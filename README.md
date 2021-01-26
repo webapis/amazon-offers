@@ -47,31 +47,37 @@
 1. Question: How do you allocate more CPU for your actor run?
 
 - Answer:
-  First option: - You can allocate more CPU from actor's detail page, Under source tab, below Developer console select options tab.
-  Secod option: - You can allocate more CPU from actor's task detail page under setting tab.
+
+  - First option: - You can allocate more CPU from actor's detail page, Under source tab, below Developer console select options tab.
+  - Secod option: - You can allocate more CPU from actor's task detail page under setting tab.
 
          Note: And I think memory allocation to an actor also should be possible from Apify API enpoint. But I have not exlored Apify API  fully yet.
 
 2. Question: How can you get exact time when the actor was started from within the running actor process?
 
-- Answer: to get exact time when the actor was started you can you `process.env.APIFY_STARTED_AT` environment valiable
+- Answer: By accessing `process.env.APIFY_STARTED_AT` environment valiable
 
 3. Which are the default storages an actor run is allocated (connected to)?
 
-- Answer: An actor run is allocated `default key-value` store, `default dataset` store, and `default request queue` store
+- Answer: There are currently three types of default storages allocated to an actor run:
+  - `default key-value`
+  - `default dataset`
+  - `default request queue`
 
 4. Question: Can you change the memory allocated to a running actor?
 
-- Answer: You cannot change the memory allocated to an actor actor if it is already running ? But you can run the actor with a new set of configuration
+- Answer: You cannot change the memory allocated to an actor if the actor is already running ? But you can run the actor with a new set of configuration
   (timeout,memory, CPU).
 
-5. Question: How can you actor with Puppeteer in a headful (non-headless) mode?
-- Answer:  
-    First option:  `const browser = await Apify.launchPuppeteer({ headless: false })`  (Synchronous run)
-    Second option: `const crawler = new Apify.PuppeteerCrawler({  `
-                                                `launchPuppeteerOptions: {`
-                                                `headless: false`
-                                                 `} })`
+5. Question: How can you run actor with Puppeteer in a headful (non-headless) mode?
+
+- Answer:
+  - First option: `const browser = await Apify.launchPuppeteer({ headless: false })` (Synchronous run)
+  - Second option: `const crawler = new Apify.PuppeteerCrawler({ `
+    `launchPuppeteerOptions: {`
+    `headless: false`
+    `} })`
+
 6. Question: Imagine the server/instance the container is running on has a 32 GB, 8-core CPU.What would be the most performant (speed/cost)
    memory allocation for CHeerioCrawler? (Hint: Nodejs process cannot user user created thread)
 
