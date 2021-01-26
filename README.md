@@ -48,8 +48,8 @@
 
 - Answer:
 
-  - First option: - You can allocate more CPU from actor's detail page, Under source tab, below Developer console select options tab.
-  - Secod option: - You can allocate more CPU from actor's task detail page under setting tab.
+  - First option: - on Apify app  from actor's detail page, Under source tab, below Developer console, select options tab.
+  - Secod option: - on Apify app  from actor's task detail page under setting tab.
 
          Note: And I think memory allocation to an actor also should be possible from Apify API enpoint. But I have not exlored Apify API  fully yet.
 
@@ -66,8 +66,8 @@
 
 4. Question: Can you change the memory allocated to a running actor?
 
-- Answer: You cannot change the memory allocated to an actor if the actor is already running ? But you can run the actor with a new set of configuration
-  (timeout,memory, CPU).
+- Answer: You cannot change the memory allocated to an actor if the actor is already running. But you can run the actor with a new set of configurations
+  (like timeout, memory or CPU).
 
 5. Question: How can you run actor with Puppeteer in a headful (non-headless) mode?
 
@@ -85,7 +85,7 @@
     headless: false
     } 
     })
-        
+
     ```
 
 6. Question: Imagine the server/instance the container is running on has a 32 GB, 8-core CPU.What would be the most performant (speed/cost)
