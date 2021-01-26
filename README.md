@@ -66,9 +66,12 @@
   (timeout,memory, CPU).
 
 5. Question: How can you actor with Puppeteer in a headful (non-headless) mode?
-
-- Answer:
-
+- Answer:  
+    First option:  `const browser = await Apify.launchPuppeteer({ headless: false })`  (Synchronous run)
+    Second option: `const crawler = new Apify.PuppeteerCrawler({  `
+                                                `launchPuppeteerOptions: {`
+                                                `headless: false`
+                                                 `} })`
 6. Question: Imagine the server/instance the container is running on has a 32 GB, 8-core CPU.What would be the most performant (speed/cost)
    memory allocation for CHeerioCrawler? (Hint: Nodejs process cannot user user created thread)
 
