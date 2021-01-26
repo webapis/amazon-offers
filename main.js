@@ -31,7 +31,7 @@ Apify.main(async () => {
       //proxyConfiguration,
       handlePageFunction,
       launchPuppeteerOptions: {
-        headless: false,
+        headless: true,
       },
     });
     await crawler.run();
