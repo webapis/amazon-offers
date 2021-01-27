@@ -14,8 +14,8 @@
       "title":"Product Length",
       "type":"integer",
       "description":"Total products to scrape",
-      "minLength":1,
-      "maxLength":100,
+      "minimum":1,
+      "maximum":100,
       "default":5
     
      
