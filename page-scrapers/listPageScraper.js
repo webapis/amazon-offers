@@ -1,10 +1,10 @@
 const Apify = require('apify');
-module.exports = async function ({ page, requestQueue }) {
+module.exports = async function ({ page, requestQueue,productLength }) {
   try {
       debugger;
     const asins = await page.$$eval('div[data-asin]', (els) =>
       els
-        //.filter((e, i) => i < 20)
+        .filter((e, i) => i <= productLength)
         .map((el) => el.getAttribute('data-asin'))
     );
     debugger;

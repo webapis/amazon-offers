@@ -5,7 +5,7 @@ const offerPageScraper = require('./page-scrapers/offerPageScraper');
 
 Apify.main(async () => {
   try {
-    const { keyword } = await Apify.getInput();
+    const { keyword, maxConcurrency, productLength } = await Apify.getInput();
     debugger;
     const requestQueue = await Apify.openRequestQueue();
     await requestQueue.addRequest({
@@ -18,20 +18,24 @@ Apify.main(async () => {
         await detailPageScraper({ request, page, requestQueue });
       } else if (request.userData.offerPage) {
         debugger;
-        await offerPageScraper({ page, request,keyword });
+        await offerPageScraper({ page, request, keyword });
       } else {
         debugger;
-        await listPageScraper({ page, requestQueue });
+        await listPageScraper({ page, requestQueue, productLength });
       }
     };
     //const proxyConfiguration = await Apify.createProxyConfiguration();
     const crawler = new Apify.PuppeteerCrawler({
-      // maxRequestsPerCrawl: 20,
+      maxConcurrency,
       requestQueue,
       //proxyConfiguration,
       handlePageFunction,
       launchPuppeteerOptions: {
         headless: true,
+        slowMo: 3000,
+        args: [
+          '--user-agent=Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.96 Mobile Safari/537.36',
+        ],
       },
     });
     await crawler.run();

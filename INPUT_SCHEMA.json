@@ -7,8 +7,31 @@
       "title": "Keyword",
       "type": "string",
       "description": "Enter the keyword for the phone",
+      "default":"phone",
       "editor": "textfield"
-    }
+    },
+    "productLength":{
+      "title":"Product Length",
+      "type":"integer",
+      "description":"Total products to scrape",
+      "default":"5",
+      "editor":"textfield"
+    },
+    "proxy":{
+      "title": "Proxy configuration",
+      "type": "object",
+      "description": "Select proxies to be used by your crawler.",
+      "prefill": { "useApifyProxy": true },
+      "editor": "proxy"
+    },
+    "maxConcurrency": {
+      "title": "Max concurrency",
+      "type": "integer",
+      "description": "The maximum number of search results pages the crawler will load in parallel. A higher number means you will get your results faster, but also it will burn through your available proxies quicker.",
+      "default": 5,
+      "maximum": 100,
+      "minimum": 1
+  }
   },
-  "required": []
+  "required": ["keyword","productLength"]
 }
