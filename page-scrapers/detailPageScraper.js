@@ -34,6 +34,8 @@ module.exports = async function detailPageScraper({
 
     console.log('detail page', title);
   } catch (error) {
+    const screenshot = await page.screenshot();
+    await Apify.setValue('detailPageError', screenshot, { contentType: 'image/png' });
     console.log('error origin detail page')
     debugger;
     throw error;
