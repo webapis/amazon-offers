@@ -1,3 +1,5 @@
 {
-    "greeting": "hello"
+    "productLength": 1,
+    "keyword":"iphone",
+    "maxConcurrency":1
 }
