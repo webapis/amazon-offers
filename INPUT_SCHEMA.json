@@ -14,7 +14,8 @@
       "title":"Product Length",
       "type":"integer",
       "description":"Total products to scrape",
-      "default":5
+      "default":5,
+      "editor": "textfield"
      
     },
     "proxy":{
@@ -30,7 +31,8 @@
       "description": "The maximum number of search results pages the crawler will load in parallel. A higher number means you will get your results faster, but also it will burn through your available proxies quicker.",
       "default": 5,
       "maximum": 100,
-      "minimum": 1
+      "minimum": 1,
+      "editor": "textfield"
   }
   },
   "required": ["keyword","productLength"]
