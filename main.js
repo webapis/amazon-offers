@@ -5,7 +5,7 @@ const offerPageScraper = require('./page-scrapers/offerPageScraper');
 
 Apify.main(async () => {
   try {
-    const { keyword, maxConcurrency, productLength } = await Apify.getInput();
+    const { keyword, maxConcurrency, productLength,proxy } = await Apify.getInput();
     debugger;
     const requestQueue = await Apify.openRequestQueue();
     await requestQueue.addRequest({
@@ -24,15 +24,15 @@ Apify.main(async () => {
         await listPageScraper({ page, requestQueue, productLength });
       }
     };
-    const proxyConfiguration = await Apify.createProxyConfiguration({
-      groups: ['RESIDENTIAL'],
-      countryCode: 'US',
-    });
+    // const proxyConfiguration = await Apify.createProxyConfiguration({
+    //   groups: ['RESIDENTIAL'],
+    //   countryCode: 'US',
+    // });
                                          
     const crawler = new Apify.PuppeteerCrawler({
       maxConcurrency,
       requestQueue,
-      proxyConfiguration,
+      proxyConfiguration:proxy,
       handlePageFunction,
       launchPuppeteerOptions: {
         headless: true,

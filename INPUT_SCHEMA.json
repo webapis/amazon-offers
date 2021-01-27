@@ -22,7 +22,13 @@
       "minimum": 5,
       "unit": "page"
     },
-
+    "proxy":{
+      "title": "Proxy configuration",
+      "type": "object",
+      "description": "Select proxies to be used by your crawler.",
+      "prefill": { "useApifyProxy": true },
+      "editor": "proxy"
+    },
     "maxConcurrency": {
       "title": "Max concurrency",
       "type": "integer",
