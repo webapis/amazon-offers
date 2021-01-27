@@ -24,15 +24,15 @@ Apify.main(async () => {
         await listPageScraper({ page, requestQueue, productLength });
       }
     };
-    // const proxyConfiguration = await Apify.createProxyConfiguration({
-    //   groups: ['RESIDENTIAL'],
-    //   countryCode: 'US',
-    // });
+  const proxyConfiguration = await Apify.createProxyConfiguration({
+       groups: ['RESIDENTIAL'],
+      countryCode: 'US',
+    });
                                          
     const crawler = new Apify.PuppeteerCrawler({
       maxConcurrency,
       requestQueue,
-      proxyConfiguration:proxy,
+      proxyConfiguration,
       handlePageFunction,
       launchPuppeteerOptions: {
         headless: true,
