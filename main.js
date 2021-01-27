@@ -25,7 +25,7 @@ Apify.main(async () => {
       }
     };
     const proxyConfiguration = await Apify.createProxyConfiguration({
-      groups: ['GROUP1', 'GROUP2'] // List of Apify Proxy groups
+      groups: ['GROUP1', 'GROUP2'], // List of Apify Proxy groups
       countryCode: 'US',
     });
                                          
