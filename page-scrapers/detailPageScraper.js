@@ -5,9 +5,8 @@ module.exports = async function detailPageScraper({
   requestQueue,
 }) {
   try {
-  
     const { ASIN } = request.userData;
-    await page.waitForSelector('#title')
+
     const title = await page.$eval('#title', (el) => el.innerText.trim());
     const url = request.url;
 

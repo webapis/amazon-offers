@@ -29,30 +29,30 @@ Apify.main(async () => {
         debugger;
         //90202
         //#nav-global-location-popover-link
-
-        await page.waitForSelector('#nav-global-location-popover-link', {
-          timeout: 0,
-        });
-        await page.click('#nav-global-location-popover-link');
-        await page.waitForSelector('#GLUXZipUpdateInput', { timeout: 0 });
-        await page.type('#GLUXZipUpdateInput', '90202', { delay: 100 });
-        debugger;
-        await page.waitForSelector('#GLUXZipUpdate-announce', { timeout: 0 });
-        await page.click('#GLUXZipUpdate-announce');
-        debugger;
-        await page.waitForSelector(
-          '#a-popover-4 > div > div.a-popover-footer > span',
-          { timeout: 0 }
-        );
-        await page.click('#a-popover-4 > div > div.a-popover-footer > span');
+        if (!Apify.isAtHome()) {
+          await page.waitForSelector('#nav-global-location-popover-link', {
+            timeout: 0,
+          });
+          await page.click('#nav-global-location-popover-link');
+          await page.waitForSelector('#GLUXZipUpdateInput', { timeout: 0 });
+          await page.type('#GLUXZipUpdateInput', '90202', { delay: 100 });
+          debugger;
+          await page.waitForSelector('#GLUXZipUpdate-announce', { timeout: 0 });
+          await page.click('#GLUXZipUpdate-announce');
+          debugger;
+          await page.waitForSelector(
+            '#a-popover-4 > div > div.a-popover-footer > span',
+            { timeout: 0 }
+          );
+          await page.click('#a-popover-4 > div > div.a-popover-footer > span');
+        }
 
         //GLUXConfirmClose-announce
         debugger;
-        // await page.click('#a-popover-4 > div > div.a-popover-footer > span > span > span > button')
-        //#a-popover-4 > div > div.a-popover-footer > span > span > span > button
+  
         await listPageScraper({ page, requestQueue, productLength });
       }
-    }; //#a-popover-4 > div > div.a-popover-footer > span
+    }; 
     //const proxyConfiguration = await Apify.createProxyConfiguration();
 
     const crawler = new Apify.PuppeteerCrawler({
@@ -64,7 +64,7 @@ Apify.main(async () => {
         viewport: { width: 1200, height: 1200 },
 
         headless: Apify.isAtHome() ? true : false,
-        
+
         args: [
           '--user-agent=Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.96 Mobile Safari/537.36',
         ],
