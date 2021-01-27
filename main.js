@@ -24,10 +24,7 @@ Apify.main(async () => {
         await listPageScraper({ page, requestQueue, productLength });
       }
     };
-  const proxyConfiguration = await Apify.createProxyConfiguration({
-       groups: ['RESIDENTIAL'],
-      countryCode: 'US',
-    });
+  const proxyConfiguration = await Apify.createProxyConfiguration();
                                          
     const crawler = new Apify.PuppeteerCrawler({
       maxConcurrency,
@@ -35,7 +32,7 @@ Apify.main(async () => {
       proxyConfiguration,
       handlePageFunction,
       launchPuppeteerOptions: {
-        headless: true,
+        headless: true, 
         slowMo: 3000,
         args: [
           '--user-agent=Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.96 Mobile Safari/537.36',
