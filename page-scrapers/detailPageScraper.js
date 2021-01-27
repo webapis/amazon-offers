@@ -6,7 +6,7 @@ module.exports = async function detailPageScraper({
 }) {
   try {
     const { ASIN } = request.userData;
-
+    await page.waitForSelector('#title', { timeout: 9000 });
     const title = await page.$eval('#title', (el) => el.innerText.trim());
     const url = request.url;
 
@@ -35,8 +35,10 @@ module.exports = async function detailPageScraper({
     console.log('detail page', title);
   } catch (error) {
     const screenshot = await page.screenshot();
-    await Apify.setValue('detailPageError', screenshot, { contentType: 'image/png' });
-    console.log('error origin detail page')
+    await Apify.setValue('detailPageError', screenshot, {
+      contentType: 'image/png',
+    });
+    console.log('error origin detail page');
     debugger;
     throw error;
   }

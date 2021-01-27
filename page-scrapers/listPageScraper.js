@@ -12,7 +12,7 @@ module.exports = async function ({ page, requestQueue,productLength }) {
     asins.forEach((ASIN) => {
       if (ASIN !== '') {
         const detailRequest = new Apify.Request({
-          url: `https://www.amazon.com/dp/${ASIN}`,
+          url: `${ASIN}`,
           userData: { detailPage: true, ASIN },
         });
         requestQueue.addRequest(detailRequest);
