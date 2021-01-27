@@ -24,11 +24,11 @@ Apify.main(async () => {
         await listPageScraper({ page, requestQueue, productLength });
       }
     };
-    //const proxyConfiguration = await Apify.createProxyConfiguration();
+    const proxyConfiguration = await Apify.createProxyConfiguration();
     const crawler = new Apify.PuppeteerCrawler({
       maxConcurrency,
       requestQueue,
-      //proxyConfiguration,
+      proxyConfiguration,
       handlePageFunction,
       launchPuppeteerOptions: {
         headless: true,

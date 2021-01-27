@@ -18,7 +18,6 @@
       "sectionCaption": "Product Length",
       "sectionDescription": "The total number of products to be scraped",
       "editor": "number",
-      "prefill": 5,
       "maximum": 100,
       "minimum": 5,
       "unit": "page"
@@ -40,5 +39,5 @@
     
   }
   },
-  "required": ["keyword","productLength"]
+  "required": ["keyword"]
 }
