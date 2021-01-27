@@ -14,8 +14,8 @@
       "title":"Product Length",
       "type":"integer",
       "description":"Total products to scrape",
-      "default":5,
-      "editor":"textfield"
+      "default":5
+     
     },
     "proxy":{
       "title": "Proxy configuration",
