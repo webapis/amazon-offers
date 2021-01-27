@@ -24,7 +24,11 @@ Apify.main(async () => {
         await listPageScraper({ page, requestQueue, productLength });
       }
     };
-    const proxyConfiguration = await Apify.createProxyConfiguration();
+    const proxyConfiguration = await Apify.createProxyConfiguration({
+      groups: ['GROUP1', 'GROUP2'] // List of Apify Proxy groups
+      countryCode: 'US',
+    });
+                                         
     const crawler = new Apify.PuppeteerCrawler({
       maxConcurrency,
       requestQueue,
