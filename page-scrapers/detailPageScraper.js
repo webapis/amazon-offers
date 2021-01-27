@@ -34,6 +34,7 @@ module.exports = async function detailPageScraper({
 
     console.log('detail page', title);
   } catch (error) {
+    console.log('error origin detail page')
     debugger;
     throw error;
   }
