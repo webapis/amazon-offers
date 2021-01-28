@@ -21,12 +21,12 @@ Apify.main(async () => {
       if (request.userData.detailPage) {
         await detailPageScraper({ request, page, requestQueue });
       } else if (request.userData.offerPage) {
-        debugger;
+       
         //1611741168799.5  csm_ct
         await offerPageScraper({ page, request, keyword });
-      } else if (!visitedList) {
+      } else  {
         visitedList = true;
-        debugger;
+      
         //90202
         //#nav-global-location-popover-link
         if (!Apify.isAtHome()) {
@@ -48,7 +48,7 @@ Apify.main(async () => {
         }
 
         //GLUXConfirmClose-announce
-        debugger;
+       
   
         await listPageScraper({ page, requestQueue, productLength });
       }
@@ -62,11 +62,11 @@ Apify.main(async () => {
       handlePageFunction,
       launchPuppeteerOptions: {
         viewport: { width: 1200, height: 1200 },
-
+        slowMo:10,
         headless: Apify.isAtHome() ? true : false,
 
         args: [
-          '--user-agent=Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.96 Mobile Safari/537.36',
+          "--user-agent= 5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36 ",
         ],
       },
     });

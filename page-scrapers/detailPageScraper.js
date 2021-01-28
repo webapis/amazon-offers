@@ -6,10 +6,11 @@ module.exports = async function detailPageScraper({
 }) {
   try {
     const { ASIN } = request.userData;
-  
+    debugger;
+    await page.waitForSelector('#title')
     const title = await page.$eval('#title', (el) => el.innerText.trim());
     const url = request.url;
-
+debugger;
     const descriptionExist = await page.$('#productDescription');
     let description = null;
     if (descriptionExist) {
