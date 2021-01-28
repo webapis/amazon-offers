@@ -4,6 +4,9 @@ module.exports = async function offerPageScraper({ page, request, keyword }) {
     const { title, url, description } = request.userData;
     console.log('offer Page', title);
     //OFFERS
+     page.on('framenavigated',()=>{
+       debugger;
+     })
     await page.waitForSelector('.olpOffer');
     const data = await page.$$eval(
       '.olpOffer',

@@ -7,12 +7,6 @@ module.exports = async function detailPageScraper({
   try {
     const { ASIN } = request.userData;
 
-    page.on('popup', async () => {});
-    //#aod-close > span > span > i
-    let uiChanged = await page.$('#aod-close > span > span > i');
-    if (uiChanged) {
-      await uiChanged.click();
-    }
     await page.waitForSelector('#title');
     const title = await page.$eval('#title', (el) => el.innerText.trim());
     const url = request.url;
@@ -35,6 +29,7 @@ module.exports = async function detailPageScraper({
 
     const offerRequest = new Apify.Request({
       url: `https://www.amazon.com/gp/offer-listing/${ASIN}`,
+      noRetry: true,
       userData: { offerPage: true, title, url, description },
     });
     requestQueue.addRequest(offerRequest);
