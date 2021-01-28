@@ -1,16 +1,9 @@
 const Apify = require('apify');
-module.exports = async function detailPageScraper({
-  request,
-  page,
-  requestQueue,
-}) {
+module.exports = async function detailPageScraper({ page }) {
   try {
-    const { ASIN } = request.userData;
-
     await page.waitForSelector('#title');
     const title = await page.$eval('#title', (el) => el.innerText.trim());
-    const url = request.url;
-
+ 
     const descriptionExist = await page.$('#productDescription');
     let description = null;
     if (descriptionExist) {
@@ -27,15 +20,10 @@ module.exports = async function detailPageScraper({
       );
     }
 
-    const offerRequest = new Apify.Request({
-      url: `https://www.amazon.com/gp/offer-listing/${ASIN}`,
-      noRetry: true,
-      userData: { offerPage: true, title, url, description },
-    });
-    requestQueue.addRequest(offerRequest);
-
     console.log('detail page', title);
+    return { title, description };
   } catch (error) {
+
     const screenshot = await page.screenshot();
     await Apify.setValue('detailPageError', screenshot, {
       contentType: 'image/png',
