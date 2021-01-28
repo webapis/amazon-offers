@@ -6,20 +6,17 @@ module.exports = async function detailPageScraper({
 }) {
   try {
     const { ASIN } = request.userData;
-    debugger;
-    page.on('popup',async ()=>{
-   debugger;
-      })
+
+    page.on('popup', async () => {});
     //#aod-close > span > span > i
-    let uiChanged=await page.$('#aod-close > span > span > i')
-    if(uiChanged){
-      debugger;
-      await uiChanged.click()
+    let uiChanged = await page.$('#aod-close > span > span > i');
+    if (uiChanged) {
+      await uiChanged.click();
     }
-    await page.waitForSelector('#title')
+    await page.waitForSelector('#title');
     const title = await page.$eval('#title', (el) => el.innerText.trim());
     const url = request.url;
-debugger;
+
     const descriptionExist = await page.$('#productDescription');
     let description = null;
     if (descriptionExist) {
@@ -49,7 +46,7 @@ debugger;
       contentType: 'image/png',
     });
     console.log('error origin detail page');
-    debugger;
+
     throw error;
   }
 };

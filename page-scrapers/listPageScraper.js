@@ -3,7 +3,7 @@ module.exports = async function ({ page, requestQueue, productLength }) {
   try {
     //https://www.amazon.com/Phone-Byeong-ki-Ahn/dp/B01DUER8JS/ref=sr_1_1?dchild=1&keywords=phone+movie&qid=1611809549&sr=8-1
     // !e.getAttribute('href').includes('1611809549')
-    debugger;
+
     const asins = await page.$$eval(
       'div[data-asin]',
       (els, _productLength) =>
@@ -23,7 +23,6 @@ module.exports = async function ({ page, requestQueue, productLength }) {
       }
     });
   } catch (error) {
-    debugger;
     throw error;
   }
 };

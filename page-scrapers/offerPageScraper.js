@@ -1,7 +1,6 @@
 const Apify = require('apify');
 module.exports = async function offerPageScraper({ page, request, keyword }) {
   try {
-    debugger;
     const { title, url, description } = request.userData;
     console.log('offer Page', title);
     //OFFERS
@@ -36,7 +35,6 @@ module.exports = async function offerPageScraper({ page, request, keyword }) {
 
     await Apify.pushData(data);
   } catch (error) {
-    debugger;
     throw error;
   }
 };

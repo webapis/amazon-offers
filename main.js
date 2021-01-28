@@ -18,41 +18,59 @@ Apify.main(async () => {
     });
 
     const handlePageFunction = async ({ request, page }) => {
+     //debugger;
       if (request.userData.detailPage) {
         await detailPageScraper({ request, page, requestQueue });
       } else if (request.userData.offerPage) {
-       
         //1611741168799.5  csm_ct
+        debugger;
         await offerPageScraper({ page, request, keyword });
-      } else  {
-        visitedList = true;
+      }
+      else if (request.url.includes('ref=olp_aod_redir#aod')){
+debugger;
+      }
+      else if (request.url.includes('ref=olp_dp_redi')){
+        debugger;
+              }
+      ///ref=olp_dp_redir
+      else 
       
-        //90202
+      {
+        visitedList = true;
+
+        const isCaptchaPage = await page.$(
+          'body > div > div.a-row.a-spacing-double-large > div.a-section > div > div > form > div.a-section.a-spacing-extra-large > div > span > span > button'
+        );
+        debugger;
+        if (isCaptchaPage) {
+          await requestQueue.addRequest({
+            url: `https://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=${keyword}`,
+          });
+        } else {
+          debugger;
+          await listPageScraper({ page, requestQueue, productLength });
+        }
+        ///errors/validateCaptcha
         //#nav-global-location-popover-link
-        if (!Apify.isAtHome()) {
+        if (false) {
           await page.waitForSelector('#nav-global-location-popover-link', {
             timeout: 0,
           });
           await page.click('#nav-global-location-popover-link');
           await page.waitForSelector('#GLUXZipUpdateInput', { timeout: 0 });
           await page.type('#GLUXZipUpdateInput', '90202', { delay: 100 });
-      
+
           await page.waitForSelector('#GLUXZipUpdate-announce', { timeout: 0 });
           await page.click('#GLUXZipUpdate-announce');
-       
+
           await page.waitForSelector(
             '#a-popover-4 > div > div.a-popover-footer > span',
             { timeout: 0 }
           );
           await page.click('#a-popover-4 > div > div.a-popover-footer > span');
         }
-
-       
-       
-  
-        await listPageScraper({ page, requestQueue, productLength });
       }
-    }; 
+    };
     //const proxyConfiguration = await Apify.createProxyConfiguration();
 
     const crawler = new Apify.PuppeteerCrawler({
@@ -62,17 +80,16 @@ Apify.main(async () => {
       handlePageFunction,
       launchPuppeteerOptions: {
         viewport: { width: 1200, height: 1200 },
-        slowMo:10,
+        slowMo: 10,
         headless: Apify.isAtHome() ? true : false,
 
         args: [
-          "--user-agent= 5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36 ",
+          '--user-agent= 5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36 ',
         ],
       },
     });
     await crawler.run();
   } catch (error) {
-    debugger;
     throw error;
   }
 });
