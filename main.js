@@ -36,10 +36,10 @@ Apify.main(async () => {
           await page.click('#nav-global-location-popover-link');
           await page.waitForSelector('#GLUXZipUpdateInput', { timeout: 0 });
           await page.type('#GLUXZipUpdateInput', '90202', { delay: 100 });
-          debugger;
+      
           await page.waitForSelector('#GLUXZipUpdate-announce', { timeout: 0 });
           await page.click('#GLUXZipUpdate-announce');
-          debugger;
+       
           await page.waitForSelector(
             '#a-popover-4 > div > div.a-popover-footer > span',
             { timeout: 0 }

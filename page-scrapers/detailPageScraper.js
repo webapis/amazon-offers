@@ -7,6 +7,15 @@ module.exports = async function detailPageScraper({
   try {
     const { ASIN } = request.userData;
     debugger;
+    page.on('popup',async ()=>{
+   debugger;
+      })
+    //#aod-close > span > span > i
+    let uiChanged=await page.$('#aod-close > span > span > i')
+    if(uiChanged){
+      debugger;
+      await uiChanged.click()
+    }
     await page.waitForSelector('#title')
     const title = await page.$eval('#title', (el) => el.innerText.trim());
     const url = request.url;
