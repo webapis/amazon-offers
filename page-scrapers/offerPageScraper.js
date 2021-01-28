@@ -35,8 +35,8 @@ module.exports= async function offerPageScraper({page,request, keyword}){
           description
         );
     
-        const offersDataSet = await Apify.openDataset('offers');
-        await offersDataSet.pushData(data);
+        //const offersDataSet = await Apify.openDataset('offers');
+        await Apify.pushData(data);
     } catch (error) {
       debugger;
         throw error

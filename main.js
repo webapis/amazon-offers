@@ -47,7 +47,7 @@ Apify.main(async () => {
           await page.click('#a-popover-4 > div > div.a-popover-footer > span');
         }
 
-        //GLUXConfirmClose-announce
+       
        
   
         await listPageScraper({ page, requestQueue, productLength });
