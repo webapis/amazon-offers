@@ -6,10 +6,13 @@
     "apify": "^0.21.0"
   },
   "devDependencies": {
-    "cross-env": "^7.0.2"
+    "axios": "^0.21.1",
+    "cross-env": "^7.0.2",
+    "express": "^4.17.1"
   },
   "scripts": {
     "start": "node main.js",
-    "dev": " apify run -p"
+    "dev": " apify run -p",
+    "launchBrowser": " node dev-tools/serveWsEndpoint.js"
   }
 }
