@@ -33,7 +33,7 @@ Apify.main(async () => {
     // Launch web browser.
     const browser = Apify.isAtHome()
       ? await Apify.launchPuppeteer({
-          headless: false,
+          headless: true,
           viewport: { width: 1200, height: 1200 },
           slowMo: 10,
           args: [USER_AGENT],
