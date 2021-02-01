@@ -33,7 +33,7 @@ Apify.main(async () => {
     // Launch web browser.
     const browser = Apify.isAtHome()
       ? await Apify.launchPuppeteer({
-          headless: true,
+          headless: false,
           viewport: { width: 1200, height: 1200 },
           slowMo: 10,
           args: [USER_AGENT],
@@ -85,7 +85,7 @@ Apify.main(async () => {
         await startPage.type('#twotabsearchtextbox', keyword, {
           delay: Math.floor(getRandomInt(50, 99)),
         });
-        await startPage.waitFor(getRandomInt(2, 4) * 1000);
+        await startPage.waitForTimeout(getRandomInt(2, 4) * 1000);
         await startPage.click('#nav-search-submit-button');
       }
     }
@@ -94,7 +94,7 @@ Apify.main(async () => {
       height: 1500,
       deviceScaleFactor: 1,
     });
-    await startPage.waitFor(5000);
+    await startPage.waitForTimeout(5000);
     const productOffers = [];
 
     // const isCaptchaPage = await homePage.$(CAPTCHA_SELECTOR);
@@ -107,7 +107,7 @@ Apify.main(async () => {
     // open detailPages
     for (const p of productIds) {
       if (p !== '') {
-        await startPage.waitFor(3000);
+        await startPage.waitForTimeout(3000);
         const productElement = await startPage.$(`div[data-asin=${p}] img`);
 
         if (productElement) {
