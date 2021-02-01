@@ -136,6 +136,11 @@ Apify.main(async () => {
 
     debugger;
   } catch (error) {
+    const screenshot = await page.screenshot();
+    await Apify.setValue('mainjsError', screenshot, {
+      contentType: 'image/png',
+    });
+    console.log('error main.js');
     debugger;
     throw error;
   }
