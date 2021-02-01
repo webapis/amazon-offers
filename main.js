@@ -71,13 +71,17 @@ Apify.main(async () => {
           waitUntil: 'domcontentloaded',
         });
         const screenshot = await startPage.screenshot();
-        const isCaptchaPage = await homePage.$(CAPTCHA_SELECTOR);
-        if (isCaptchaPage) {
-          await homePage.reload();
-        }
-        await Apify.setValue('www.amazon.com', screenshot, {
+        const isCaptchaPage = await startPage.$(CAPTCHA_SELECTOR);
+        await Apify.setValue('www.amazon.com1', screenshot, {
           contentType: 'image/png',
         });
+        if (isCaptchaPage) {
+          await startPage.reload();
+        }
+        await Apify.setValue('www.amazon.com2', screenshot, {
+          contentType: 'image/png',
+        });
+        await startPage.waitForSelector('#twotabsearchtextbox');
         await startPage.type('#twotabsearchtextbox', keyword, {
           delay: Math.floor(getRandomInt(50, 99)),
         });
