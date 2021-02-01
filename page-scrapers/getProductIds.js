@@ -9,7 +9,7 @@ module.exports = async function ({ page, productLength }) {
     productLength
   );
 
-  return shuffle(productIds);
+  return shuffle(productIds.filter(p=>p !=='B01DUER6YU'));
 };
 
 function shuffle(array) {

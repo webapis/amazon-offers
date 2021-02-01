@@ -33,7 +33,7 @@ Apify.main(async () => {
     // Launch web browser.
     const browser = Apify.isAtHome()
       ? await Apify.launchPuppeteer({
-          headless: false,
+          headless: true,
           viewport: { width: 1200, height: 1200 },
           slowMo: 10,
           args: [USER_AGENT],
@@ -66,6 +66,7 @@ Apify.main(async () => {
         await startPage.bringToFront();
       } else {
         startPage = await browser.newPage();
+
         await startPage.goto('https://www.amazon.com', {
           waitUntil: 'domcontentloaded',
         });
@@ -81,84 +82,62 @@ Apify.main(async () => {
       height: 1500,
       deviceScaleFactor: 1,
     });
+    await startPage.waitFor(5000);
     const productOffers = [];
 
     // const isCaptchaPage = await homePage.$(CAPTCHA_SELECTOR);
     // if (isCaptchaPage) {
     //   await homePage.reload();
     // }
-debugger;
+
     const productIds = await getProductIds({ page: startPage, productLength });
-  //   debugger;
-  //   const loadedPageUrls = await (await browser.pages()).map((p) =>
-  //     p.url().substring(p.url().indexOf('/dp/') + 4, p.url().indexOf('/ref='))
-  //   );
-  //  debugger;
-  //   const productIdToBeLoaded = productIds.filter(function filterLoaded(e) {
-  //     const match = this.indexOf(e) < 0;
-      
-  //     return match;
-  //   }, loadedPageUrls);
-    debugger;
+
     // open detailPages
     for (const p of productIds) {
       if (p !== '') {
-        await startPage.waitFor(getRandomInt(5, 10) * 1000);
+        await startPage.waitFor(3000);
         const productElement = await startPage.$(`div[data-asin=${p}] img`);
-   
+
         if (productElement) {
+          await startPage.evaluate((_p) => {
+            const elementToScroll = document.querySelector(
+              `div[data-asin=${_p}] img`
+            );
+            elementToScroll.scrollIntoView();
+
+            return Promise.resolve(true);
+          }, p);
+
           await clickOnElement({ page: startPage, elem: productElement });
         }
       }
     }
-debugger;
 
+    for (const url of detailUrls) {
+      if (url !== '') {
+        const detailPage = await (await browser.pages()).find(
+          (p) => p.url() === url
+        );
 
-    //deliveryMessageMirId
+        const { description, title } = await detailPageScraper({
+          page: detailPage,
+        });
+
+        await offerPageScraper({
+          page: detailPage,
+          title,
+          description,
+        });
+       
+
+        debugger;
+      }
+    }
+
+    debugger;
   } catch (error) {
     debugger;
     throw error;
   }
 });
 
-// await homePage.waitFor(Math.floor(Math.random() * 2) * 1000);
-// const searchInput = await homePage.$eval(
-//   '#twotabsearchtextbox',
-//   (el) => el.value
-// );
-
-// const currentUrl = homePage.url();
-// debugger;
-// if (
-//   searchInput.length > 1 &&
-//   currentUrl !== `https://www.amazon.com/s?k=${keyword}&ref=nb_sb_noss`
-// ) {
-//   await homePage.focus('#twotabsearchtextbox');
-//   await homePage.click('#twotabsearchtextbox', { clickCount: 3 });
-//   await homePage.keyboard.press('Backspace');
-// }
-// if (searchInput.length === 0) {
-//   await homePage.type('#twotabsearchtextbox', keyword, {
-//     delay: Math.floor(Math.random() * 99),
-//   });
-//   await homePage.waitFor(Math.floor(Math.random() * 3) * 1000);
-//   await homePage.click('#nav-search-submit-button');
-//   //await homePage.waitForSelector('.s-result-list', { timeout: 0 });
-//   await homePage.waitFor(Math.floor(Math.random() * 5) * 1000);
-// }
-
-// // const isCaptchaPage = await homePage.$(CAPTCHA_SELECTOR);
-// // if (isCaptchaPage) {
-// //   await homePage.reload();
-// // }
-// debugger;
-// const productIds = await getProductIds({ page: homePage, productLength });
-
-// const productElement = await homePage.$(
-//   `div[data-asin=${productIds[0]}] img`
-// );
-// debugger;
-// await clickOnElement({ page: homePage, elem: productElement });
-// debugger;
-
-//deliveryMessageMirId

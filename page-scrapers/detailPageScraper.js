@@ -1,6 +1,7 @@
 const Apify = require('apify');
 module.exports = async function detailPageScraper({ page }) {
   try {
+  
     await page.waitForSelector('#title');
     const title = await page.$eval('#title', (el) => el.innerText.trim());
  
@@ -21,7 +22,9 @@ module.exports = async function detailPageScraper({ page }) {
     }
 
     console.log('detail page', title);
+  
     return { title, description };
+  
   } catch (error) {
 
     const screenshot = await page.screenshot();
