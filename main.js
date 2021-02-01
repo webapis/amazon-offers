@@ -71,6 +71,10 @@ Apify.main(async () => {
           waitUntil: 'domcontentloaded',
         });
         const screenshot = await startPage.screenshot();
+        const isCaptchaPage = await homePage.$(CAPTCHA_SELECTOR);
+        if (isCaptchaPage) {
+          await homePage.reload();
+        }
         await Apify.setValue('www.amazon.com', screenshot, {
           contentType: 'image/png',
         });
@@ -132,7 +136,6 @@ Apify.main(async () => {
           title,
           description,
         });
-       
 
         debugger;
       }
@@ -140,10 +143,8 @@ Apify.main(async () => {
 
     debugger;
   } catch (error) {
-
     console.log('error main.js');
     debugger;
     throw error;
   }
 });
-
