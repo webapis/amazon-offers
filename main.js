@@ -70,6 +70,10 @@ Apify.main(async () => {
         await startPage.goto('https://www.amazon.com', {
           waitUntil: 'domcontentloaded',
         });
+        const screenshot = await startPage.screenshot();
+        await Apify.setValue('www.amazon.com', screenshot, {
+          contentType: 'image/png',
+        });
         await startPage.type('#twotabsearchtextbox', keyword, {
           delay: Math.floor(getRandomInt(50, 99)),
         });
@@ -136,10 +140,7 @@ Apify.main(async () => {
 
     debugger;
   } catch (error) {
-    const screenshot = await startPage.screenshot();
-    await Apify.setValue('mainjsError', screenshot, {
-      contentType: 'image/png',
-    });
+
     console.log('error main.js');
     debugger;
     throw error;
