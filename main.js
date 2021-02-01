@@ -36,7 +36,7 @@ Apify.main(async () => {
           headless: true,
           viewport: { width: 1200, height: 1200 },
           slowMo: 10,
-          args: [USER_AGENT],
+          args: [USER_AGENT,`--window-size=1200,1250`],
         })
       : await getBrowser();
     browser.on('targetcreated', async (target) => {
@@ -66,8 +66,9 @@ Apify.main(async () => {
         await startPage.bringToFront();
       } else {
         startPage = await browser.newPage();
+        await startPage.setJavaScriptEnabled(false);
         startPage.once('request', (request) => {
-          const headers =request.headers()
+          const headers = request.headers();
           debugger;
         });
         await startPage.goto('https://www.amazon.com', {
@@ -133,7 +134,7 @@ Apify.main(async () => {
         const detailPage = await (await browser.pages()).find(
           (p) => p.url() === url
         );
-
+        //await detailPage.setJavaScriptEnabled(false);
         const { description, title } = await detailPageScraper({
           page: detailPage,
         });
