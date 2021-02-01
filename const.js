@@ -15,3 +15,6 @@ module.exports = {
   DETAIL_URL_REGEX:/https:[-/][-/]www.amazon.com[-/].*[-/]dp[-/].*[-/]ref=.*[?]dchild=1&keywords=.*&qid=.*&sr=.*/i
 };
 //    'https://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=',
+
+
+//user-agent:'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.96 Safari/537.36'
