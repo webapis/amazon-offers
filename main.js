@@ -34,9 +34,9 @@ Apify.main(async () => {
     const browser = Apify.isAtHome()
       ? await Apify.launchPuppeteer({
           headless: true,
-          viewport: { width: 1200, height: 1200 },
-          slowMo: 10,
-          args: [USER_AGENT,`--window-size=1200,1250`,'--proxy-server=http://groups-SHADER+BUYPROXIES94952:pHCXRWGXhoaczMTwYk4DwCu3k@proxy.apify.com:8000'],
+
+          userAgent:USER_AGENT,
+    
         })
       : await getBrowser();
     browser.on('targetcreated', async (target) => {
