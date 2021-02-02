@@ -6,65 +6,55 @@ module.exports = async function offerPageScraper({ page, title, description }) {
     ////https://www.amazon.com/gp/offer-listing/B004OA758C/ref=dp_olp_NEW_mbc?ie=UTF8&condition=NEW
 
     await page.bringToFront();
-    const offersLink = await page.$(
-      '#olp_feature_div > div.a-section.a-spacing-small.a-spacing-top-small > span > a'
-    );
+
     debugger;
-    if (offersLink) {
-      await page.click(
-        '#olp_feature_div > div.a-section.a-spacing-small.a-spacing-top-small > span > a',
-        { button: 'middle' }
-      );
+    await page.waitForSelector('#olpOfferList');
+    console.log('offer view is visible.......');
+    const screenshot = await page.screenshot();
 
-      debugger;
-      await page.waitForSelector('#aod-offer-list', { timeout: 0 });
-      console.log('offer view is visible.......');
-      const screenshot = await page.screenshot();
-
-      await Apify.setValue('offer§list', screenshot, {
-        contentType: 'image/png',
-      });
-      const data = await page.$$eval(
-        '#aod-offer',
-        ($offers, _title, _description) => {
-          return $offers.map(($offer) => {
-            const sellerSelector = $offer.querySelector('#aod-offer-soldBy a');
-            const priceSelector = $offer.querySelector('.a-price .a-offscreen');
-            const shippingSelector = $offer.querySelector(
-              '#aod-offer-price > div > div > div.a-fixed-left-grid-col.a-col-right > div > div > div.a-fixed-right-grid-col.aod-padding-right-10.a-col-left > span > span'
-            );
-
-            return {
-              title: _title,
-              description: _description,
-              seller: sellerSelector
-                ? sellerSelector.innerText
-                    .replace(/(\r\n\t|\n|\r|\t)/gm, '')
-                    .replace(/^\s+|\s+$/g, '')
-                : 'seller',
-              price: priceSelector
-                ? priceSelector.innerText
-                    .replace(/(\r\n\t|\n|\r|\t)/gm, '')
-                    .replace(/^\s+|\s+$/g, '')
-                : 'price',
-              shipping: shippingSelector
-                ? shippingSelector.innerText
-                    .replace(/(\r\n\t|\n|\r|\t)/gm, '')
-                    .replace(/^\s+|\s+$/g, '')
-                : 'shipping',
-            };
-          });
-        },
-        title,
-        description
-      );
-      // if (data) {
-      console.log('OFFER:.......');
-
-      console.log('save item to dataset.....', JSON.stringify(data));
-      //await Apify.pushData(data);
-      // }
-    }
+    await Apify.setValue('offerlist', screenshot, {
+      contentType: 'image/png',
+    });
+    // const target = await page.target();
+    // const opener = await target.opener();
+    debugger;
+    const data = await page.$$eval(
+      '#olpOfferList .olpOffer',
+      ($offers, _title, _description) => {
+        return $offers.map(($offer) => {
+          const sellerSelector = $offer.querySelector('.olpSellerName');
+          const priceSelector = $offer.querySelector('.olpOfferPrice');
+          const contitionSelector = $offer.querySelector('.olpCondition');
+          return {
+            title: _title,
+            description: _description,
+            seller: sellerSelector
+              ? sellerSelector.innerText
+                  .replace(/(\r\n\t|\n|\r|\t)/gm, '')
+                  .replace(/^\s+|\s+$/g, '')
+              : 'seller',
+            condition: contitionSelector
+              ? contitionSelector.innerText
+                  .replace(/(\r\n\t|\n|\r|\t)/gm, '')
+                  .replace(/^\s+|\s+$/g, '')
+              : 'condition',
+            price: priceSelector
+              ? priceSelector.innerText
+                  .replace(/(\r\n\t|\n|\r|\t)/gm, '')
+                  .replace(/^\s+|\s+$/g, '')
+              : 'price',
+          };
+        });
+      },
+      title,
+      description
+    );
+    // if (data) {
+    console.log('OFFER:.......');
+    debugger;
+    console.log('save item to dataset.....', JSON.stringify(data));
+    //await Apify.pushData(data);
+    // }
   } catch (error) {
     const screenshot = await page.screenshot();
 

@@ -29,8 +29,8 @@ Apify.main(async () => {
       productLength,
       proxy,
     } = await Apify.getInput();
-    let detailUrls = [];
-    let offerUrls = [];
+    let detailPages = [];
+    let offerPages = [];
     let startPage = null;
     // Launch web browser.
     const browser = Apify.isAtHome()
@@ -42,17 +42,27 @@ Apify.main(async () => {
       : await getBrowser();
     browser.on('targetcreated', async (target) => {
       try {
+        const type = target.type();
+
+        if (type !== 'page') return;
         const page = await target.page();
+
         await page.waitForFunction("window.location.href !== 'about:blank'");
+        const title = await page.title();
+        if (title === 'Sorry! Something went wrong!') {
+          await page.bringToFront();
+          await page.reload();
+        }
+
         const targetUrl = target.url();
 
         console.log('target created.............', targetUrl);
         if (targetUrl.match(DETAIL_URL_REGEX)) {
           console.log('opened detaiPage with url.......', targetUrl);
-          detailUrls.push(targetUrl);
+          detailPages.push(target);
         }
         if (targetUrl.match(OFFER_URL_REGEX)) {
-          offerUrls.push(target);
+          offerPages.push(target);
         }
       } catch (error) {
         throw error;
@@ -150,7 +160,7 @@ Apify.main(async () => {
         }
       }
     }
-    console.log('total detail pages open..........', detailUrls.length);
+    console.log('total detail pages open..........', detailPages.length);
     console.log(
       'total  pages open..........',
       await (await browser.pages()).length
@@ -161,39 +171,46 @@ Apify.main(async () => {
     await Apify.setValue('seedetailpagetabs', screenshotTabs, {
       contentType: 'image/png',
     });
-    for (const url of detailUrls) {
-      if (url !== '') {
-        const detailPage = await (await browser.pages()).find(
-          (p) => p.url() === url
-        );
+    //open offer page in a new tab
+    for (const target of detailPages) {
+      const page = await target.page();
+      await page.bringToFront();
+      await page.setViewport({
+        width: 1500,
+        height: 1500,
+        deviceScaleFactor: 1,
+      });
 
-        const { description, title } = await detailPageScraper({
-          page: detailPage,
-        });
+      await page.waitForSelector('#ppd');
+      const moreOfferLink = await page.$(
+        '#olp_feature_div > div.a-section.a-spacing-small.a-spacing-top-small > span > a'
+      );
+      if (moreOfferLink) {
+        //scrape infor for miltiple price offer
 
-        //nav to offer page
-        await page.click(
-          '#olp_feature_div > div.a-section.a-spacing-small.a-spacing-top-small > span > a',
-          { button: 'middle' }
-        );
-
-        // await offerPageScraper({
-        //   page: detailPage,
-        //   title,
-        //   description,
-        // });
+        await moreOfferLink.click({ button: 'middle' });
+      } else {
+        //scrape infor for single price offer
       }
     }
-    for (const url of offerUrls) {
-      const offerPage = await (await browser.pages()).find(
-        (p) => p.url() === url
-      );
+    debugger;
+    for (const target of offerPages) {
+      const page = await target.page();
+      debugger;
+      const client = await target.createCDPSession();
+      client.on('Target.receivedMessageFromTarget', (info) => {
+        debugger;
+      });
+      await client.send('Target.getTargetInfo');
+
+      debugger;
+      await offerPageScraper({ page, title: 'title', description: 'desc' });
     }
-    const dataSet = await Apify.openDataset();
-    console.log(
-      'scraping is complete........ with total:',
-      await dataSet.getInfo()
-    );
+    // const dataSet = await Apify.openDataset();
+    // console.log(
+    //   'scraping is complete........ with total:',
+    //   await dataSet.getInfo()
+    // );
   } catch (error) {
     console.log('error main.js');
 
