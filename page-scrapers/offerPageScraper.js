@@ -3,19 +3,18 @@ module.exports = async function offerPageScraper({ page, title, description }) {
   try {
     console.log('offer Page');
     ////https://www.amazon.com/gp/offer-listing/B004OA758C/ref=dp_olp_NEW_mbc?ie=UTF8&condition=NEW
-    debugger;
+
     await page.bringToFront();
     const offersExist = await page.$(
       '#olp_feature_div > div.a-section.a-spacing-small.a-spacing-top-small > span > a'
     );
-    debugger;
+
     if (offersExist) {
       await page.click(
         '#olp_feature_div > div.a-section.a-spacing-small.a-spacing-top-small > span > a'
       );
 
       await page.waitForSelector('#aod-offer-list');
-      debugger;
 
       const data = await page.$$eval(
         '#aod-offer',
@@ -26,7 +25,7 @@ module.exports = async function offerPageScraper({ page, title, description }) {
             const shippingSelector = $offer.querySelector(
               '#aod-offer-price > div > div > div.a-fixed-left-grid-col.a-col-right > div > div > div.a-fixed-right-grid-col.aod-padding-right-10.a-col-left > span > span'
             );
-            debugger;
+
             if (sellerSelector && priceSelector && shippingSelector) {
               return {
                 title: _title,
@@ -47,7 +46,7 @@ module.exports = async function offerPageScraper({ page, title, description }) {
         title,
         description
       );
-      debugger;
+
       await Apify.pushData(data);
     }
   } catch (error) {

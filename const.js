@@ -12,7 +12,7 @@ module.exports = {
   OFFER_REGEX: /https:\/\/www.amazon.com\/gp\/offer-listing\/.*/i,
   wsChromeEndpointurl:'ws://127.0.0.1:9222/devtools/browser/9f35a1a2-aeec-4073-b132-c7ef025634df',
   SEARCH_RESULT_URL_REGEX:/https:[-/][-/]www.amazon.com[-/].*/i,
-  DETAIL_URL_REGEX:/https:[-/][-/]www.amazon.com[-/].*[-/]dp[-/].*[-/]ref=.*[?]dchild=1&keywords=.*&qid=.*&sr=.*/i
+  DETAIL_URL_REGEX:/https:[-/][-/]www.amazon.com[-/].*[-/]dp[-/].*/i
 };
 //    'https://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=',
 

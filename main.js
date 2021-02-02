@@ -35,18 +35,23 @@ Apify.main(async () => {
       ? await Apify.launchPuppeteer({
           headless: true,
 
-          userAgent:USER_AGENT,
-    
+          userAgent: USER_AGENT,
         })
       : await getBrowser();
     browser.on('targetcreated', async (target) => {
       try {
+        debugger;
+
+        const page = await target.page();
+        await page.waitForFunction("window.location.href !== 'about:blank'");
         const targetUrl = target.url();
+        debugger;
+        console.log('target created.............', targetUrl);
         if (targetUrl.match(DETAIL_URL_REGEX)) {
+          console.log('opened detaiPage with url.......', targetUrl);
           detailUrls.push(targetUrl);
         }
       } catch (error) {
-        debugger;
         throw error;
       }
     });
@@ -55,25 +60,32 @@ Apify.main(async () => {
       (p) => p.url() === `https://www.amazon.com/s?k=${keyword}&ref=nb_sb_noss`
     );
     if (pageWithSearchResult) {
+      console.log(
+        'page with pageWithSearchResult exists............',
+        `https://www.amazon.com/s?k=${keyword}&ref=nb_sb_noss`
+      );
       startPage = pageWithSearchResult;
       await startPage.bringToFront();
     } else {
       const homePage = await (await browser.pages()).find(
         (p) => p.url() === `https://www.amazon.com`
       );
+
       if (homePage) {
         startPage = homePage;
         await startPage.bringToFront();
+        console.log('page with https://www.amazon.com is open.............');
       } else {
         startPage = await browser.newPage();
+        console.log('new startPage created........................');
         await startPage.setJavaScriptEnabled(false);
-        startPage.once('request', (request) => {
-          const headers = request.headers();
-          debugger;
-        });
+
         await startPage.goto('https://www.amazon.com', {
           waitUntil: 'domcontentloaded',
         });
+        console.log(
+          'page is navigated to https://www.amazon.com................'
+        );
         const screenshot = await startPage.screenshot();
         const isCaptchaPage = await startPage.$(CAPTCHA_SELECTOR);
         await Apify.setValue('www.amazon.com1', screenshot, {
@@ -85,14 +97,20 @@ Apify.main(async () => {
         await Apify.setValue('www.amazon.com2', screenshot, {
           contentType: 'image/png',
         });
+        console.log('wating for searchbox to appear.................');
         await startPage.waitForSelector('#twotabsearchtextbox');
+
         await startPage.type('#twotabsearchtextbox', keyword, {
           delay: Math.floor(getRandomInt(50, 99)),
         });
+        console.log('types the keyword into searchbox.................');
+
         await startPage.waitFor(getRandomInt(2, 4) * 1000);
         await startPage.click('#nav-search-submit-button');
+        console.log('clicked search button.................');
       }
     }
+
     await startPage.setViewport({
       width: 1500,
       height: 1500,
@@ -100,15 +118,14 @@ Apify.main(async () => {
     });
     await startPage.waitFor(5000);
     const productOffers = [];
-
-    // const isCaptchaPage = await homePage.$(CAPTCHA_SELECTOR);
-    // if (isCaptchaPage) {
-    //   await homePage.reload();
-    // }
-
+    console.log('started to collect product ids.................');
     const productIds = await getProductIds({ page: startPage, productLength });
-
+    console.log(
+      'collected product id length is.................',
+      productIds.length
+    );
     // open detailPages
+    console.log('started opening detail pages...........');
     for (const p of productIds) {
       if (p !== '') {
         await startPage.waitFor(3000);
@@ -123,18 +140,30 @@ Apify.main(async () => {
 
             return Promise.resolve(true);
           }, p);
-
+          console.log(
+            `clicked on product ${p} image to open detail page...........`
+          );
           await clickOnElement({ page: startPage, elem: productElement });
         }
       }
     }
+    console.log('total detail pages open..........', detailUrls.length);
+    console.log(
+      'total  pages open..........',
+      await (await browser.pages()).length
+    );
 
+    const screenshotTabs = await startPage.screenshot();
+
+    await Apify.setValue('seedetailpagetabs', screenshotTabs, {
+      contentType: 'image/png',
+    });
     for (const url of detailUrls) {
       if (url !== '') {
         const detailPage = await (await browser.pages()).find(
           (p) => p.url() === url
         );
-        //await detailPage.setJavaScriptEnabled(false);
+
         const { description, title } = await detailPageScraper({
           page: detailPage,
         });
@@ -144,15 +173,16 @@ Apify.main(async () => {
           title,
           description,
         });
-
-        debugger;
       }
     }
-
-    debugger;
+    const dataSet = await Apify.openDataset();
+    console.log(
+      'scraping is complete........ with total:',
+      await dataSet.getInfo()
+    );
   } catch (error) {
     console.log('error main.js');
-    debugger;
+
     throw error;
   }
 });

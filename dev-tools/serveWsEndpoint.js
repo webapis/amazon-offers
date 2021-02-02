@@ -13,9 +13,9 @@ app.get('/wsendpoint', async (req, res) => {
       res.send(browser.wsEndpoint());
     } else {
       browser = await puppeteer.launch({
-        headless: false,
+        headless: true,
         viewport: { width: 1200, height: 1200 },
-        slowMo: 10,
+        slowMo: 15,
         args: [USER_AGENT, `--window-size=1200,1250`],
       });
       //targetdestroyed'
