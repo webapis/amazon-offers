@@ -29,15 +29,21 @@ module.exports = async function offerPageScraper({ page, title, description }) {
             return {
               title: _title,
               description: _description,
-              seller: sellerSelector.innerText
-                .replace(/(\r\n\t|\n|\r|\t)/gm, '')
-                .replace(/^\s+|\s+$/g, ''),
-              price: priceSelector.innerText
-                .replace(/(\r\n\t|\n|\r|\t)/gm, '')
-                .replace(/^\s+|\s+$/g, ''),
-              shipping: shippingSelector.innerText
-                .replace(/(\r\n\t|\n|\r|\t)/gm, '')
-                .replace(/^\s+|\s+$/g, ''),
+              seller: sellerSelector
+                ? sellerSelector.innerText
+                    .replace(/(\r\n\t|\n|\r|\t)/gm, '')
+                    .replace(/^\s+|\s+$/g, '')
+                : 'seller',
+              price: priceSelector
+                ? priceSelector.innerText
+                    .replace(/(\r\n\t|\n|\r|\t)/gm, '')
+                    .replace(/^\s+|\s+$/g, '')
+                : 'price',
+              shipping: shippingSelector
+                ? shippingSelector.innerText
+                    .replace(/(\r\n\t|\n|\r|\t)/gm, '')
+                    .replace(/^\s+|\s+$/g, '')
+                : 'shipping',
             };
           });
         },
