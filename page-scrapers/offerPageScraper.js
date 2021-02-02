@@ -16,6 +16,11 @@ module.exports = async function offerPageScraper({ page, title, description }) {
 
       await page.waitForSelector('#aod-offer-list');
       console.log('offer view is visible.......');
+      const screenshot = await startPage.screenshot();
+
+      await Apify.setValue('offer§list', screenshot, {
+        contentType: 'image/png',
+      });
       const data = await page.$$eval(
         '#aod-offer',
         ($offers, _title, _description) => {
@@ -58,6 +63,11 @@ module.exports = async function offerPageScraper({ page, title, description }) {
       // }
     }
   } catch (error) {
+    const screenshot = await startPage.screenshot();
+
+    await Apify.setValue('offerPage', screenshot, {
+      contentType: 'image/png',
+    });
     throw error;
   }
 };
