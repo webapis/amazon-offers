@@ -1,20 +1,23 @@
 const Apify = require('apify');
+const clickOnElement = require('../dev-tools/clickOnElement');
 module.exports = async function offerPageScraper({ page, title, description }) {
   try {
     console.log('offer Page');
     ////https://www.amazon.com/gp/offer-listing/B004OA758C/ref=dp_olp_NEW_mbc?ie=UTF8&condition=NEW
 
     await page.bringToFront();
-    const offersExist = await page.$(
+    const offersLink = await page.$(
       '#olp_feature_div > div.a-section.a-spacing-small.a-spacing-top-small > span > a'
     );
-
-    if (offersExist) {
+    debugger;
+    if (offersLink) {
       await page.click(
-        '#olp_feature_div > div.a-section.a-spacing-small.a-spacing-top-small > span > a'
+        '#olp_feature_div > div.a-section.a-spacing-small.a-spacing-top-small > span > a',
+        { button: 'middle' }
       );
 
-      await page.waitForSelector('#aod-offer-list');
+      debugger;
+      await page.waitForSelector('#aod-offer-list', { timeout: 0 });
       console.log('offer view is visible.......');
       const screenshot = await page.screenshot();
 

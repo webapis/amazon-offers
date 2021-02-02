@@ -17,6 +17,7 @@ const {
   wsChromeEndpointurl,
   SEARCH_RESULT_URL_REGEX,
   DETAIL_URL_REGEX,
+  OFFER_URL_REGEX,
 } = require('./const');
 
 const { error, debug } = require('apify-shared/log');
@@ -29,6 +30,7 @@ Apify.main(async () => {
       proxy,
     } = await Apify.getInput();
     let detailUrls = [];
+    let offerUrls = [];
     let startPage = null;
     // Launch web browser.
     const browser = Apify.isAtHome()
@@ -40,16 +42,17 @@ Apify.main(async () => {
       : await getBrowser();
     browser.on('targetcreated', async (target) => {
       try {
-      
-
         const page = await target.page();
         await page.waitForFunction("window.location.href !== 'about:blank'");
         const targetUrl = target.url();
-     
+
         console.log('target created.............', targetUrl);
         if (targetUrl.match(DETAIL_URL_REGEX)) {
           console.log('opened detaiPage with url.......', targetUrl);
           detailUrls.push(targetUrl);
+        }
+        if (targetUrl.match(OFFER_URL_REGEX)) {
+          offerUrls.push(target);
         }
       } catch (error) {
         throw error;
@@ -168,12 +171,23 @@ Apify.main(async () => {
           page: detailPage,
         });
 
-        await offerPageScraper({
-          page: detailPage,
-          title,
-          description,
-        });
+        //nav to offer page
+        await page.click(
+          '#olp_feature_div > div.a-section.a-spacing-small.a-spacing-top-small > span > a',
+          { button: 'middle' }
+        );
+
+        // await offerPageScraper({
+        //   page: detailPage,
+        //   title,
+        //   description,
+        // });
       }
+    }
+    for (const url of offerUrls) {
+      const offerPage = await (await browser.pages()).find(
+        (p) => p.url() === url
+      );
     }
     const dataSet = await Apify.openDataset();
     console.log(
