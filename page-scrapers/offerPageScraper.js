@@ -46,8 +46,10 @@ module.exports = async function offerPageScraper({ page, title, description }) {
         title,
         description
       );
-
-      await Apify.pushData(data);
+      if (data) {
+        console.log('save item to dataset.....');
+        await Apify.pushData(data);
+      }
     }
   } catch (error) {
     throw error;
