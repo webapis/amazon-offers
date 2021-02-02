@@ -40,12 +40,12 @@ Apify.main(async () => {
       : await getBrowser();
     browser.on('targetcreated', async (target) => {
       try {
-        debugger;
+      
 
         const page = await target.page();
         await page.waitForFunction("window.location.href !== 'about:blank'");
         const targetUrl = target.url();
-        debugger;
+     
         console.log('target created.............', targetUrl);
         if (targetUrl.match(DETAIL_URL_REGEX)) {
           console.log('opened detaiPage with url.......', targetUrl);
