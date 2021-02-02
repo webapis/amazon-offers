@@ -15,7 +15,7 @@ module.exports = async function offerPageScraper({ page, title, description }) {
       );
 
       await page.waitForSelector('#aod-offer-list');
-
+      console.log('offer view is visible.......');
       const data = await page.$$eval(
         '#aod-offer',
         ($offers, _title, _description) => {
@@ -26,30 +26,30 @@ module.exports = async function offerPageScraper({ page, title, description }) {
               '#aod-offer-price > div > div > div.a-fixed-left-grid-col.a-col-right > div > div > div.a-fixed-right-grid-col.aod-padding-right-10.a-col-left > span > span'
             );
 
-            if (sellerSelector && priceSelector && shippingSelector) {
-              return {
-                title: _title,
-                description: _description,
-                seller: sellerSelector.innerText
-                  .replace(/(\r\n\t|\n|\r|\t)/gm, '')
-                  .replace(/^\s+|\s+$/g, ''),
-                price: priceSelector.innerText
-                  .replace(/(\r\n\t|\n|\r|\t)/gm, '')
-                  .replace(/^\s+|\s+$/g, ''),
-                shipping: shippingSelector.innerText
-                  .replace(/(\r\n\t|\n|\r|\t)/gm, '')
-                  .replace(/^\s+|\s+$/g, ''),
-              };
-            }
+            return {
+              title: _title,
+              description: _description,
+              seller: sellerSelector.innerText
+                .replace(/(\r\n\t|\n|\r|\t)/gm, '')
+                .replace(/^\s+|\s+$/g, ''),
+              price: priceSelector.innerText
+                .replace(/(\r\n\t|\n|\r|\t)/gm, '')
+                .replace(/^\s+|\s+$/g, ''),
+              shipping: shippingSelector.innerText
+                .replace(/(\r\n\t|\n|\r|\t)/gm, '')
+                .replace(/^\s+|\s+$/g, ''),
+            };
           });
         },
         title,
         description
       );
-      if (data) {
-        console.log('save item to dataset.....', JSON.stringify(data));
-        await Apify.pushData(data);
-      }
+      // if (data) {
+      console.log('OFFER:.......');
+
+      console.log('save item to dataset.....', JSON.stringify(data));
+      //await Apify.pushData(data);
+      // }
     }
   } catch (error) {
     throw error;

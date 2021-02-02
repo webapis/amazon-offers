@@ -168,11 +168,11 @@ Apify.main(async () => {
           page: detailPage,
         });
 
-        // await offerPageScraper({
-        //   page: detailPage,
-        //   title,
-        //   description,
-        // });
+        await offerPageScraper({
+          page: detailPage,
+          title,
+          description,
+        });
       }
     }
     const dataSet = await Apify.openDataset();
