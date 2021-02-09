@@ -19,8 +19,14 @@ Apify.main(async () => {
       maxRequestsPerCrawl: 10,
       requestQueue,
       maxConcurrency: 1,
-      //proxyConfiguration,
+
       handlePageFunction: handlePageFunction({ requestQueue }),
+      handleFailedRequestFunction: async function ({ page, request }) {
+        const screenshot = await page.screenshot();
+        await Apify.setValue(request.id, screenshot, {
+          contentType: 'image/png',
+        });
+      },
       launchPuppeteerOptions: {
         headless: Apify.isAtHome() ? true : false,
         userAgent: USER_AGENT,
