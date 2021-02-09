@@ -2,5 +2,8 @@
 	"name": "actor-quick-start",
 	"version": "0.0",
 	"buildTag": "latest",
-	"env": null
+	"env": {
+		"APIFY_LOCAL_STORAGE_DIR":"./apify_storage",
+		"APIFY_TOKEN":"pgLqLx27CbPCcSWKu2yEh9b6"
+	}
 }

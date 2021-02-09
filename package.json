@@ -3,16 +3,18 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "apify": "^0.21.0"
+    "apify": "^0.21.11",
+    "dotenv": "^8.2.0",
+    "sinon": "^9.2.4"
   },
   "devDependencies": {
-    "axios": "^0.21.1",
     "cross-env": "^7.0.2",
-    "express": "^4.17.1"
+    "mocha": "^8.2.1"
+
   },
   "scripts": {
     "start": "node main.js",
-    "dev": " apify run -p",
-    "launchBrowser": " node dev-tools/serveWsEndpoint.js"
+    "test": "mocha  page-handlers/**/*.test.js page-scrapers/**/*.test.js ",
+    "savepages": "node test-resources/index.js"
   }
 }

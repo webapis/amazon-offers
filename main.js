@@ -1,26 +1,6 @@
 const Apify = require('apify');
-const detailPageScraper = require('./page-scrapers/detailPageScraper');
-const offerPageScraper = require('./page-scrapers/offerPageScraper');
-const popupOfferPageScraper = require('./page-scrapers/popupOfferPageScraper');
-const getProductIds = require('./page-scrapers/getProductIds');
-const getRandomInt = require('./dev-tools/getRandomInt');
-const getBrowser = require('./dev-tools/getBrowser');
-const clickOnElement = require('./dev-tools/clickOnElement');
-const {
-  HOME_URL,
-  USER_AGENT,
-  CAPTCHA_SELECTOR,
-  DETAIL_URL,
-  OFFER_URL,
-  POPUP_OFFER_REGEX,
-  OFFER_REGEX,
-  wsChromeEndpointurl,
-  SEARCH_RESULT_URL_REGEX,
-  DETAIL_URL_REGEX,
-  OFFER_URL_REGEX,
-} = require('./const');
+const {handlePageFunction} = require('./page-handlers/handlePageFunction');
 
-const { error, debug } = require('apify-shared/log');
 Apify.main(async () => {
   try {
     const {
@@ -29,191 +9,29 @@ Apify.main(async () => {
       productLength,
       proxy,
     } = await Apify.getInput();
-    let detailPages = [];
-    let offerPages = [];
-    let startPage = null;
-    // Launch web browser.
-    const browser = Apify.isAtHome()
-      ? await Apify.launchPuppeteer({
-          headless: true,
 
-          userAgent: USER_AGENT,
-        })
-      : await getBrowser();
-    browser.on('targetcreated', async (target) => {
-      try {
-        const type = target.type();
-
-        if (type !== 'page') return;
-        const page = await target.page();
-
-        await page.waitForFunction("window.location.href !== 'about:blank'");
-        const title = await page.title();
-        if (title === 'Sorry! Something went wrong!') {
-          await page.bringToFront();
-          await page.reload();
-        }
-
-        const targetUrl = target.url();
-
-        console.log('target created.............', targetUrl);
-        if (targetUrl.match(DETAIL_URL_REGEX)) {
-          console.log('opened detaiPage with url.......', targetUrl);
-          detailPages.push(target);
-        }
-        if (targetUrl.match(OFFER_URL_REGEX)) {
-          offerPages.push(target);
-        }
-      } catch (error) {
-        throw error;
-      }
+    const requestQueue = await Apify.openRequestQueue();
+    await requestQueue.addRequest({
+      url: `https://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=${keyword}`,
     });
 
-    const pageWithSearchResult = await (await browser.pages()).find(
-      (p) => p.url() === `https://www.amazon.com/s?k=${keyword}&ref=nb_sb_noss`
-    );
-    if (pageWithSearchResult) {
-      console.log(
-        'page with pageWithSearchResult exists............',
-        `https://www.amazon.com/s?k=${keyword}&ref=nb_sb_noss`
-      );
-      startPage = pageWithSearchResult;
-      await startPage.bringToFront();
-    } else {
-      const homePage = await (await browser.pages()).find(
-        (p) => p.url() === `https://www.amazon.com`
-      );
-
-      if (homePage) {
-        startPage = homePage;
-        await startPage.bringToFront();
-        console.log('page with https://www.amazon.com is open.............');
-      } else {
-        startPage = await browser.newPage();
-        console.log('new startPage created........................');
-        await startPage.setJavaScriptEnabled(false);
-
-        await startPage.goto('https://www.amazon.com', {
-          waitUntil: 'domcontentloaded',
-        });
-        console.log(
-          'page is navigated to https://www.amazon.com................'
-        );
-        const screenshot = await startPage.screenshot();
-        const isCaptchaPage = await startPage.$(CAPTCHA_SELECTOR);
-        await Apify.setValue('www.amazon.com1', screenshot, {
-          contentType: 'image/png',
-        });
-        if (isCaptchaPage) {
-          await startPage.reload();
-        }
-        await Apify.setValue('www.amazon.com2', screenshot, {
-          contentType: 'image/png',
-        });
-        console.log('wating for searchbox to appear.................');
-        await startPage.waitForSelector('#twotabsearchtextbox');
-
-        await startPage.type('#twotabsearchtextbox', keyword, {
-          delay: Math.floor(getRandomInt(50, 99)),
-        });
-        console.log('types the keyword into searchbox.................');
-
-        await startPage.waitFor(getRandomInt(2, 4) * 1000);
-        await startPage.click('#nav-search-submit-button');
-        console.log('clicked search button.................');
-      }
-    }
-
-    await startPage.setViewport({
-      width: 1500,
-      height: 1500,
-      deviceScaleFactor: 1,
+    const crawler = new Apify.PuppeteerCrawler({
+      maxRequestsPerCrawl: 10,
+      requestQueue,
+      maxConcurrency: 1,
+      //proxyConfiguration,
+      handlePageFunction: handlePageFunction({ requestQueue }),
+      launchPuppeteerOptions: {
+        headless: false,
+      },
     });
-    await startPage.waitFor(5000);
-    const productOffers = [];
-    console.log('started to collect product ids.................');
-    const productIds = await getProductIds({ page: startPage, productLength });
-    console.log(
-      'collected product id length is.................',
-      productIds.length
-    );
-    // open detailPages
-    console.log('started opening detail pages...........');
-    for (const p of productIds) {
-      if (p !== '') {
-        await startPage.waitFor(3000);
-        const productElement = await startPage.$(`div[data-asin=${p}] img`);
 
-        if (productElement) {
-          await startPage.evaluate((_p) => {
-            const elementToScroll = document.querySelector(
-              `div[data-asin=${_p}] img`
-            );
-            elementToScroll.scrollIntoView();
-
-            return Promise.resolve(true);
-          }, p);
-          console.log(
-            `clicked on product ${p} image to open detail page...........`
-          );
-          await clickOnElement({ page: startPage, elem: productElement });
-        }
-      }
-    }
-    console.log('total detail pages open..........', detailPages.length);
-    console.log(
-      'total  pages open..........',
-      await (await browser.pages()).length
-    );
-
-    const screenshotTabs = await startPage.screenshot();
-
-    await Apify.setValue('seedetailpagetabs', screenshotTabs, {
-      contentType: 'image/png',
-    });
-    //open offer page in a new tab
-    for (const target of detailPages) {
-      const page = await target.page();
-      await page.bringToFront();
-      await page.setViewport({
-        width: 1500,
-        height: 1500,
-        deviceScaleFactor: 1,
-      });
-
-      await page.waitForSelector('#ppd');
-      const moreOfferLink = await page.$(
-        '#olp_feature_div > div.a-section.a-spacing-small.a-spacing-top-small > span > a'
-      );
-      if (moreOfferLink) {
-        //scrape infor for miltiple price offer
-
-        await moreOfferLink.click({ button: 'middle' });
-      } else {
-        //scrape infor for single price offer
-      }
-    }
-    debugger;
-    for (const target of offerPages) {
-      const page = await target.page();
-      debugger;
-      const client = await target.createCDPSession();
-      client.on('Target.receivedMessageFromTarget', (info) => {
-        debugger;
-      });
-      await client.send('Target.getTargetInfo');
-
-      debugger;
-      await offerPageScraper({ page, title: 'title', description: 'desc' });
-    }
-    // const dataSet = await Apify.openDataset();
-    // console.log(
-    //   'scraping is complete........ with total:',
-    //   await dataSet.getInfo()
-    // );
+    await crawler.run();
   } catch (error) {
     console.log('error main.js');
 
     throw error;
   }
 });
+
+///Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222 --no-first-run --no-default-browser-check --user-data-dir=$(mktemp -d -t 'chrome-remote_data_dir')
