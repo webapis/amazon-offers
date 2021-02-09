@@ -11,11 +11,17 @@ module.exports = async function detailPageScraper({ page }) {
         el.innerText.trim()
       );
     }
-
-    const shipping = await page.$eval(
-      '#exports_desktop_qualifiedBuybox_tlc_feature_div > span.a-size-base.a-color-secondary',
-      (el) => el.innerText.trim()
+    let shipping = 'Not Available';
+    const shippingExists = await page.$(
+      '#exports_desktop_qualifiedBuybox_tlc_feature_div > span.a-size-base.a-color-secondary'
     );
+    if (shippingExists) {
+      shipping = await page.$eval(
+        '#exports_desktop_qualifiedBuybox_tlc_feature_div > span.a-size-base.a-color-secondary',
+        (el) => el.innerText.trim()
+      );
+    }
+
     const seller = await page.$eval(
       '#tabular-buybox-truncate-1 > span.a-truncate-cut > span',
       (el) => el.innerText.trim()
