@@ -1,5 +1,5 @@
 const Apify = require('apify');
-const {handlePageFunction} = require('./page-handlers/handlePageFunction');
+const { handlePageFunction } = require('./page-handlers/handlePageFunction');
 
 Apify.main(async () => {
   try {
@@ -22,7 +22,7 @@ Apify.main(async () => {
       //proxyConfiguration,
       handlePageFunction: handlePageFunction({ requestQueue }),
       launchPuppeteerOptions: {
-        headless: false,
+        headless: Apify.isAtHome() ? true : false,
       },
     });
 
