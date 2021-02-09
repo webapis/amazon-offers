@@ -2,7 +2,7 @@ const Apify = require('apify');
 
 module.exports = async function offerPageScraper({ page, title, description }) {
   try {
-    console.log('offer Page');
+    console.log('offerPage scraping....');
 
     debugger;
     await page.waitForSelector('#olpOfferList');

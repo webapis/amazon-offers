@@ -16,10 +16,9 @@ Apify.main(async () => {
     });
 
     const crawler = new Apify.PuppeteerCrawler({
-      maxRequestsPerCrawl: 10,
+      maxRequestsPerCrawl: 50,
       requestQueue,
       maxConcurrency: 1,
-
       handlePageFunction: handlePageFunction({ requestQueue }),
       handleFailedRequestFunction: async function ({ page, request }) {
         const screenshot = await page.screenshot();

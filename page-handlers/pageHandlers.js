@@ -5,6 +5,7 @@ const {
 const detailPageScraper = require('../page-scrapers/detailPageScraper');
 const offerPageScraper = require('../page-scrapers/offerPageScraper');
 async function offerPageHandler({ request, page, requestQueue }) {
+  console.log('offerPageHandler....')
   const { title, description } = request.userData;
   debugger;
   const offer = await offerPageScraper({ page, title, description });
@@ -16,6 +17,7 @@ async function offerPageHandler({ request, page, requestQueue }) {
 }
 
 async function detailPageHandler({ request, page, requestQueue, ASIN }) {
+  console.log('detailPagehandler....')
   const offerLink = await page.$(
     '#olp_feature_div span[data-action=show-all-offers-display] a'
   );
@@ -57,6 +59,7 @@ async function detailPageHandler({ request, page, requestQueue, ASIN }) {
 async function searchResultPageHandler({ request, page, requestQueue }) {
   try {
     debugger;
+    console.log('searchResultPageHandler....')
     const asins = await page.$$eval('div[data-asin]', (els) =>
       els.map((el) => el.getAttribute('data-asin')).filter((f) => f !== '')
     );

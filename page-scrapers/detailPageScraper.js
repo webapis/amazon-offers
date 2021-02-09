@@ -1,6 +1,7 @@
 const Apify = require('apify');
 module.exports = async function detailPageScraper({ page }) {
   try {
+    console.log('detailPage scraping....')
     await page.waitForSelector('#title');
 
     const title = await page.$eval('#title', (el) => el.innerText.trim());
