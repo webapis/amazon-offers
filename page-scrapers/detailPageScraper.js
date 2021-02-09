@@ -4,9 +4,14 @@ module.exports = async function detailPageScraper({ page }) {
     await page.waitForSelector('#title');
 
     const title = await page.$eval('#title', (el) => el.innerText.trim());
-    const price = await page.$eval('#price_inside_buybox', (el) =>
-      el.innerText.trim()
-    );
+    const priceExists = await page.$('#price_inside_buybox');
+    let price = 'Not avaliable';
+    if (priceExists) {
+      price = await page.$eval('#price_inside_buybox', (el) =>
+        el.innerText.trim()
+      );
+    }
+
     const shipping = await page.$eval(
       '#exports_desktop_qualifiedBuybox_tlc_feature_div > span.a-size-base.a-color-secondary',
       (el) => el.innerText.trim()
