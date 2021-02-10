@@ -1,10 +1,16 @@
 const Apify = require('apify');
-
+const cookies = require('../test-resources/cookies.json');
 const pageHandlers = require('./pageHandlers');
 
 function handlePageFunction({ requestQueue }) {
-  return async function ({ request, page }) {
+  return async function (args) {
     try {
+      const { request, page } = args;
+      debugger;
+
+      debugger;
+      //await page.setCookies(page, cookies);
+      
       if (request.userData.offerPage) {
         debugger;
         return await pageHandlers.offerPageHandler({

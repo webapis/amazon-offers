@@ -1,9 +1,10 @@
 const Apify = require('apify');
 module.exports = async function detailPageScraper({ page }) {
   try {
-    console.log('detailPage scraping....')
+    console.log('detailPage scraping....');
     await page.waitForSelector('#title');
-
+   
+    debugger;
     const title = await page.$eval('#title', (el) => el.innerText.trim());
     const priceExists = await page.$('#price_inside_buybox');
     let price = 'Not avaliable';
@@ -46,6 +47,7 @@ module.exports = async function detailPageScraper({ page }) {
       price,
       shipping,
       seller,
+      dataAsin: 'ASIN',
     };
   } catch (error) {
     debugger;

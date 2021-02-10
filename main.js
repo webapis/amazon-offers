@@ -1,6 +1,7 @@
 const Apify = require('apify');
 const { handlePageFunction } = require('./page-handlers/handlePageFunction');
 const { USER_AGENT } = require('./const');
+const cookies = require('./test-resources/cookies.json');
 Apify.main(async () => {
   try {
     const {
@@ -16,9 +17,35 @@ Apify.main(async () => {
     });
 
     const crawler = new Apify.PuppeteerCrawler({
-      maxRequestsPerCrawl: 50,
+      //maxRequestsPerCrawl: 10,
       requestQueue,
       maxConcurrency: 1,
+      useSessionPool: true,
+      persistCookiesPerSession: true,
+      preNavigationHooks: [
+        async (crawlingContext, gotoOptions) => {
+          const { page, browserController } = crawlingContext;
+
+          await browserController.setCookies(page, cookies);
+
+          console.log('prenavigation hook');
+        },
+      ],
+      postNavigationHooks: [
+        async (crawlingContext) => {
+          const { page, request } = crawlingContext;
+          const { userData, url } = request;
+
+          if (userData.detailPage) {
+            const dataAsin = url.substring(
+              url.indexOf('/dp/') + 4,
+              url.indexOf('/ref=')
+            );
+
+            request.userData = { ...userData, dataAsin };
+          }
+        },
+      ],
       handlePageFunction: handlePageFunction({ requestQueue }),
       handleFailedRequestFunction: async function ({ page, request }) {
         const screenshot = await page.screenshot();
@@ -26,9 +53,11 @@ Apify.main(async () => {
           contentType: 'image/png',
         });
       },
-      launchPuppeteerOptions: {
-        headless: Apify.isAtHome() ? true : false,
-        userAgent: USER_AGENT,
+      launchContext: {
+        launchOptions: {
+          headless: Apify.isAtHome() ? true : false,
+          args: [`--user-agent=${USER_AGENT}`],
+        },
       },
     });
 

@@ -1,0 +1,79 @@
+[
+    {
+        "name": "csm-hit",
+        "value": "tb:s-EBNER9FMN0ZCZAHKFZ2Y|1612930919792&t:1612930921608&adb:adblk_no",
+        "domain": "www.amazon.com",
+        "path": "/",
+        "expires": 1643170921,
+        "size": 75,
+        "httpOnly": false,
+        "secure": false,
+        "session": false
+    },
+    {
+        "name": "ubid-main",
+        "value": "133-9224220-2635252",
+        "domain": ".amazon.com",
+        "path": "/",
+        "expires": 1644466934.329172,
+        "size": 28,
+        "httpOnly": false,
+        "secure": true,
+        "session": false
+    },
+    {
+        "name": "skin",
+        "value": "noskin",
+        "domain": ".amazon.com",
+        "path": "/",
+        "expires": -1,
+        "size": 10,
+        "httpOnly": false,
+        "secure": false,
+        "session": true
+    },
+    {
+        "name": "session-id-time",
+        "value": "2082787201l",
+        "domain": ".amazon.com",
+        "path": "/",
+        "expires": 1644466934.32935,
+        "size": 26,
+        "httpOnly": false,
+        "secure": false,
+        "session": false
+    },
+    {
+        "name": "i18n-prefs",
+        "value": "USD",
+        "domain": ".amazon.com",
+        "path": "/",
+        "expires": 1644466673.865049,
+        "size": 13,
+        "httpOnly": false,
+        "secure": false,
+        "session": false
+    },
+    {
+        "name": "session-token",
+        "value": "wlv5AoaioXCaJ9YOrojrOq048kCFCrUXsnWAB2Jx2Gkj2uh+4rr0jGh4LoH4T3A0qJBu+qf7TucfhGLALUFaHXvbGtAL4gSrv+CiRNsPUpNt/RxodU4SIU0U+85BFSZG5RaiII+RhGc1LvDE/CLvNZr1ommm5ZN8nDghZVG1S4oRWs2SCN6J2k8XrhiDe4aV8J48YTjX25PK/XCzwBVWO7O4zST2rPaTJKd46hQp0qQ+WMcksQhzFH4yPXpc+avz",
+        "domain": ".amazon.com",
+        "path": "/",
+        "expires": 1644466685.726008,
+        "size": 269,
+        "httpOnly": false,
+        "secure": true,
+        "session": false
+    },
+    {
+        "name": "session-id",
+        "value": "133-7574431-2428109",
+        "domain": ".amazon.com",
+        "path": "/",
+        "expires": 1644466934.329465,
+        "size": 29,
+        "httpOnly": false,
+        "secure": true,
+        "session": false
+    }
+]
