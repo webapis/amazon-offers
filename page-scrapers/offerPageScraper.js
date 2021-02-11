@@ -3,10 +3,8 @@ const Apify = require('apify');
 module.exports = async function offerPageScraper({ page, title, description }) {
   try {
     console.log('offerPage scraping....');
-
     debugger;
     await page.waitForSelector('#olpOfferList');
-
     debugger;
     const data = await page.$$eval(
       '#olpOfferList .olpOffer',
@@ -46,7 +44,7 @@ module.exports = async function offerPageScraper({ page, title, description }) {
   } catch (error) {
     const screenshot = await page.screenshot();
     debugger;
- 
+
     throw error;
   }
 };

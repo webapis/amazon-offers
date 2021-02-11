@@ -20,8 +20,8 @@ Apify.main(async () => {
       //maxRequestsPerCrawl: 10,
       requestQueue,
       maxConcurrency: 1,
-      useSessionPool: true,
-      persistCookiesPerSession: true,
+      // useSessionPool: true,
+      // persistCookiesPerSession: true,
       preNavigationHooks: [
         async (crawlingContext, gotoOptions) => {
           const { page, browserController } = crawlingContext;

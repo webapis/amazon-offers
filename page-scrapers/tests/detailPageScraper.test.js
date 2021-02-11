@@ -13,7 +13,7 @@ describe('Test detailPageScraper', function () {
   });
 
 
-  it.only('should scrape data from detailPage', async function () {
+  it('should scrape data from detailPage', async function () {
     this.timeout(50000);
     const expectedTitle =
       'VTech CS6114 DECT 6.0 Cordless Phone with Caller ID/Call Waiting, White/Grey with 1 Handset';

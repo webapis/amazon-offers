@@ -5,13 +5,28 @@ const {
 } = Apify;
 const detailPageScraper = require('../page-scrapers/detailPageScraper');
 const offerPageScraper = require('../page-scrapers/offerPageScraper');
+const offerPopoverScraper = require('../page-scrapers/offerPopoverScraper');
 async function offerPageHandler({ request, page, requestQueue }) {
   console.log('offerPageHandler....');
   const { title, description } = request.userData;
   debugger;
-  const offer = await offerPageScraper({ page, title, description });
+
+  const isOfferPage = await page.$('#olpOfferList');
+  const isOfferPopoverPage = await page.$('#all-offers-display-scroller');
   debugger;
-  const dataset = await Apify.pushData(offer);
+  if (isOfferPage) {
+    debugger;
+    const offer = await offerPageScraper({ page, title, description });
+    debugger;
+    const dataset = await Apify.pushData(offer);
+  }
+  if (isOfferPopoverPage) {
+    debugger;
+    const offer = await offerPopoverScraper({ page, title, description });
+    debugger;
+    const dataset = await Apify.pushData(offer);
+  }
+
   debugger;
 
   return requestQueue;
@@ -25,7 +40,7 @@ async function detailPageHandler({ request, page, requestQueue, ASIN }) {
   });
   debugger;
   const offerRequest = new Apify.Request({
-    url: `https://www.amazon.com/gp/offer-listing/${dataAsin}`,
+    url: `https://www.amazon.com/dp/${dataAsin}/ref=olp_aod_redir#aod`, //`https://www.amazon.com/gp/offer-listing/${dataAsin}`,
     userData: {
       offerPage: true,
       title,
@@ -44,11 +59,9 @@ async function searchResultPageHandler({ request, page, requestQueue }) {
   try {
     debugger;
     console.log('searchResultPageHandler....');
-    // const asins = await page.$$eval('div[data-asin]', (els) =>
-    //   els.map((el) => el.getAttribute('data-asin')).filter((f) => f !== '')
-    // );
+
     const queuedInfo = await enqueueLinks({
-      limit: 5,
+      limit: 10,
       page,
       requestQueue,
       selector: '.s-main-slot div[data-asin] a.a-link-normal',
@@ -58,8 +71,6 @@ async function searchResultPageHandler({ request, page, requestQueue }) {
         return request;
       },
     });
-
-    debugger;
 
     debugger;
     return requestQueue;
