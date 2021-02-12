@@ -20,15 +20,14 @@ Apify.main(async () => {
       //maxRequestsPerCrawl: 10,
       requestQueue,
       maxConcurrency: 1,
-      // useSessionPool: true,
-      // persistCookiesPerSession: true,
+
       preNavigationHooks: [
         async (crawlingContext, gotoOptions) => {
           const { page, browserController } = crawlingContext;
 
           await browserController.setCookies(page, cookies);
 
-          console.log('prenavigation hook');
+          console.log('preNavigationHooks');
         },
       ],
       postNavigationHooks: [
@@ -41,7 +40,7 @@ Apify.main(async () => {
               url.indexOf('/dp/') + 4,
               url.indexOf('/ref=')
             );
-
+            console.log('postNavigationHooks');
             request.userData = { ...userData, dataAsin };
           }
         },
@@ -54,7 +53,10 @@ Apify.main(async () => {
         });
       },
       launchContext: {
+        useChrome: true,
+        stealth: true,
         launchOptions: {
+          slowMo: 100,
           headless: Apify.isAtHome() ? true : false,
           args: [`--user-agent=${USER_AGENT}`],
         },
@@ -63,9 +65,7 @@ Apify.main(async () => {
 
     await crawler.run();
   } catch (error) {
-    console.log('error main.js');
-
-    throw error;
+    console.log('error main.js', error);
   }
 });
 //

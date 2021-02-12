@@ -13,7 +13,7 @@ describe('Test offerpopoverPageScraper', function () {
     await browser.close();
   });
 
-  it.only('should scrape data from offer popover page', async function () {
+  it('should scrape data from offer popover page', async function () {
     this.timeout(50000);
     debugger;
     const content = await loadPageContent({

@@ -7,10 +7,7 @@ function handlePageFunction({ requestQueue }) {
     try {
       const { request, page } = args;
       debugger;
-
-      debugger;
-      //await page.setCookies(page, cookies);
-      
+  
       if (request.userData.offerPage) {
         debugger;
         return await pageHandlers.offerPageHandler({
@@ -27,7 +24,7 @@ function handlePageFunction({ requestQueue }) {
         });
       } else {
         debugger;
-        //searchResultpage
+     
         return await pageHandlers.searchResultPageHandler({
           request,
           page,

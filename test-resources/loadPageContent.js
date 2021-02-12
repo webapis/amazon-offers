@@ -4,7 +4,7 @@ module.exports = async function ({filepath}) {
   try {
     
     const content = fs.readFileSync(path.join(__dirname,filepath), 'utf8')
-  
+  debugger;
     return content
   } catch (error) {
     debugger;

@@ -16,7 +16,7 @@ describe('Test detailPageHandler', function () {
     sandbox.restore();
   });
   it('should create request objects if offer page exist', async function () {
-    this.timeout(5000);
+    this.timeout(100000);
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
     const content = await loadPageContent({
@@ -30,10 +30,11 @@ describe('Test detailPageHandler', function () {
     debugger;
     await page.setContent(content);
     const request = {
-      userData: { detailPage: true },
+      userData: { detailPage: true, dataAsin:'BD4545689' },
       loadedUrl: 'https://www.amazon.com',
     };
     const requestQueue = await Apify.openRequestQueue();
+
     await requestQueue.addRequest({
       url: 'https://www.amazon.com/s?k=phone&ref=nb_sb_noss_1',
     });
@@ -42,13 +43,13 @@ describe('Test detailPageHandler', function () {
     const detailPageHandler = await pageHandlers.detailPageHandler;
     const returnValue = await detailPageHandler.returnValues[0];
     debugger;
-    sandbox.assert.match(returnValue.pendingCount, 2);
+    sandbox.assert.match(returnValue.assumedTotalCount, 2);
     await returnValue.drop();
 
     debugger;
   });
 
-  it('should save an offer if only single offer exist', async function () {
+  it.skip('should save an offer if only single offer exist', async function () {
     this.timeout(50000);
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
@@ -69,7 +70,7 @@ describe('Test detailPageHandler', function () {
       offerLink.remove();
     });
     const request = {
-      userData: { detailPage: true },
+      userData: { detailPage: true,dataAsin:'BD4545689' },
       loadedUrl: 'https://www.amazon.com',
     };
     const requestQueue = await Apify.openRequestQueue();

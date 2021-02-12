@@ -13,6 +13,7 @@ module.exports = async function ({ page, description, title }) {
 
     debugger;
     await page.waitForSelector('#all-offers-display-scroller');
+    await page.waitForSelector('#aod-offer-list')
     const data = await page.$$eval(
       '#aod-offer',
       ($offers, _title, _description) => {
