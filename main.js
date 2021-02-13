@@ -14,6 +14,14 @@ Apify.main(async () => {
     const crawler = new Apify.PuppeteerCrawler({
       requestQueue,
       maxConcurrency,
+      preNavigationHooks: [
+        async (crawlingContext, gotoOptions) => {
+          const { page, browserController } = crawlingContext;
+          await browserController.setCookies(page, cookies);
+          console.log('preNavigationHooks');
+        },
+      ],
+
       proxyConfiguration,
       postNavigationHooks: [
         async (crawlingContext) => {
