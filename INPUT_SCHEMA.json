@@ -55,7 +55,7 @@
                 "Cleveland",
                 "Portland"
             ],
-            "default": 10001
+            "default": "Washington"
         }
     },
     "required": [
