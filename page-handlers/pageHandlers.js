@@ -1,5 +1,6 @@
 const { PseudoUrl } = require('apify');
 const clickOnElement = require('../utils/clickOnElement');
+const getRandomInt = require('../utils/getRandomInt');
 const Apify = require('apify');
 const {
   utils: { enqueueLinks },
@@ -112,19 +113,21 @@ async function homePageHandler({ request, page, requestQueue }) {
     await page.waitForSelector('#GLUXZipUpdateInput');
 
     await page.type('#GLUXZipUpdateInput', zipcode);
- 
+
     await page.click('#GLUXZipUpdate > span > input');
+    await page.waitFor(getRandomInt(5, 10));
+    const simplePop = await page.$('#a-popover-3');
+    const compPop = await page.$('#GLUXChangePostalCodeLink');
+    if (simplePop) {
+      const continueBtn = await page.$('#a-popover-3 input');
+      debugger;
+      await clickOnElement({ page, elem: simplePop });
+    } else {
+      await clickOnElement({ page, elem: compPop });
+    }
 
-    //  await page.waitForSelector('#GLUXChangePostalCodeLink');
-
-    //  await page.click('#a-autoid-3-announce');
-  
     await page.waitForSelector('#a-popover-3');
 
-  
-    const continueBtn = await page.$('#a-popover-3 input');
-    debugger;
-    await clickOnElement({ page, elem: continueBtn });
     debugger;
     // await page.waitForSelector('#nav-global-location-popover-link', {
     //   visible: false,
