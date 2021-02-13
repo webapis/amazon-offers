@@ -10,17 +10,11 @@ Apify.main(async () => {
     await requestQueue.addRequest({
       url: `https://www.amazon.com`,
     });
-
+    const proxyConfiguration = await Apify.createProxyConfiguration();
     const crawler = new Apify.PuppeteerCrawler({
       requestQueue,
       maxConcurrency,
-      // preNavigationHooks: [
-      //   async (crawlingContext, gotoOptions) => {
-      //     const { page, browserController } = crawlingContext;
-      //     await browserController.setCookies(page, cookies);
-      //     console.log('preNavigationHooks');
-      //   },
-      // ],
+      proxyConfiguration,
       postNavigationHooks: [
         async (crawlingContext) => {
           const { page, request } = crawlingContext;

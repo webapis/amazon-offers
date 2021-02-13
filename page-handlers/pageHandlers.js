@@ -109,7 +109,7 @@ async function homePageHandler({ request, page, requestQueue }) {
     const { zipcode, keyword } = await Apify.getInput();
     await page.waitForSelector('#nav-global-location-popover-link');
     await page.click('#nav-global-location-popover-link');
-    // await page.waitForSelector('.a-popover .a-popover-modal .a-declarative');
+
     await page.waitForSelector('#GLUXZipUpdateInput');
 
     await page.type('#GLUXZipUpdateInput', zipcode);
@@ -117,7 +117,9 @@ async function homePageHandler({ request, page, requestQueue }) {
     await page.click('#GLUXZipUpdate > span > input');
     await page.waitFor(getRandomInt(5, 10));
     const simplePop = await page.$('#a-popover-3');
-    const compPop = await page.$('#GLUXChangePostalCodeLink');
+    const compPop = await page.$(
+      '#a-popover-4 > div > div.a-popover-footer > span > span > span > button'
+    );
     if (simplePop) {
       const continueBtn = await page.$('#a-popover-3 input');
       debugger;
