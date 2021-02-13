@@ -112,6 +112,8 @@ async function homePageHandler({ request, page, requestQueue }) {
     debugger;
     await page.click('#nav-global-location-popover-link');
     debugger;
+
+    await page.waitForSelector('#GLUXChangePostalCodeLink');
     await page.click('#GLUXChangePostalCodeLink');
     debugger;
     await page.waitForSelector('#GLUXZipUpdateInput');
