@@ -107,33 +107,30 @@ async function homePageHandler({ request, page, requestQueue }) {
   try {
     debugger;
     const { zipcode, keyword } = await Apify.getInput();
+    debugger;
     await page.waitForSelector('#nav-global-location-popover-link');
+    debugger;
     await page.click('#nav-global-location-popover-link');
-
+    debugger;
+    await page.click('#GLUXChangePostalCodeLink');
+    debugger;
     await page.waitForSelector('#GLUXZipUpdateInput');
 
+    debugger;
     await page.type('#GLUXZipUpdateInput', zipcode);
 
     await page.click('#GLUXZipUpdate > span > input');
     await page.waitFor(getRandomInt(5, 10));
-    const simplePop = await page.$('#a-popover-3');
-    const compPop = await page.$(
-      '#a-popover-4 > div > div.a-popover-footer > span > span > span > button'
-    );
-    if (simplePop) {
-      const continueBtn = await page.$('#a-popover-3 input');
+    // const simplePop = await page.$('#a-popover-3');
+    debugger;
+
+    const compPop = await page.$('#a-autoid-3-announce');
+    if (compPop) {
+      // const continueBtn = await page.$('#a-popover-3 input');
       debugger;
-      await clickOnElement({ page, elem: simplePop });
-    } else {
       await clickOnElement({ page, elem: compPop });
     }
 
-    await page.waitForSelector('#a-popover-3');
-
-    debugger;
-    // await page.waitForSelector('#nav-global-location-popover-link', {
-    //   visible: false,
-    // });
     debugger;
     await page.waitForSelector('#twotabsearchtextbox');
     debugger;
