@@ -1,5 +1,6 @@
 {
-    "productLength": 6,
+    "productLength": 10,
     "keyword":"phone",
-    "maxConcurrency":1
+    "maxConcurrency":1,
+    "zipcode":"10001"
 }

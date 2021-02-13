@@ -4,37 +4,27 @@ const { USER_AGENT } = require('./const');
 const cookies = require('./test-resources/cookies.json');
 Apify.main(async () => {
   try {
-    const {
-      keyword,
-      maxConcurrency,
-      productLength,
-      proxy,
-    } = await Apify.getInput();
+    const { keyword, maxConcurrency } = await Apify.getInput();
 
     const requestQueue = await Apify.openRequestQueue();
     await requestQueue.addRequest({
-      url: `https://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=${keyword}`,
+      url: `https://www.amazon.com`,
     });
 
     const crawler = new Apify.PuppeteerCrawler({
-      //maxRequestsPerCrawl: 10,
       requestQueue,
-      maxConcurrency: 1,
-
-      preNavigationHooks: [
-        async (crawlingContext, gotoOptions) => {
-          const { page, browserController } = crawlingContext;
-
-          await browserController.setCookies(page, cookies);
-
-          console.log('preNavigationHooks');
-        },
-      ],
+      maxConcurrency,
+      // preNavigationHooks: [
+      //   async (crawlingContext, gotoOptions) => {
+      //     const { page, browserController } = crawlingContext;
+      //     await browserController.setCookies(page, cookies);
+      //     console.log('preNavigationHooks');
+      //   },
+      // ],
       postNavigationHooks: [
         async (crawlingContext) => {
           const { page, request } = crawlingContext;
           const { userData, url } = request;
-
           if (userData.detailPage) {
             const dataAsin = url.substring(
               url.indexOf('/dp/') + 4,

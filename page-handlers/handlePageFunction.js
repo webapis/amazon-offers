@@ -7,7 +7,7 @@ function handlePageFunction({ requestQueue }) {
     try {
       const { request, page } = args;
       debugger;
-  
+
       if (request.userData.offerPage) {
         debugger;
         return await pageHandlers.offerPageHandler({
@@ -23,9 +23,7 @@ function handlePageFunction({ requestQueue }) {
           requestQueue,
         });
       } else {
-        debugger;
-     
-        return await pageHandlers.searchResultPageHandler({
+        return await pageHandlers.homePageHandler({
           request,
           page,
           requestQueue,

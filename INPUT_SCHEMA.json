@@ -1,36 +1,65 @@
 {
-  "title": "Input schema for the apify/amazon-offer actor.",
-  "type": "object",
-  "schemaVersion": 1,
-  "properties": {
-    "keyword": {
-      "title": "Keyword",
-      "type": "string",
-      "description": "Enter the keyword for the phone",
-      "default":"phone",
-      "editor": "textfield"
+    "title": "Input schema for the apify/amazon-offer actor.",
+    "type": "object",
+    "schemaVersion": 1,
+    "properties": {
+        "keyword": {
+            "title": "Keyword",
+            "type": "string",
+            "description": "Enter the keyword for the phone",
+            "default": "phone",
+            "editor": "textfield"
+        },
+        "productLength": {
+            "title": "Total amount of products",
+            "type": "integer",
+            "description": "the total number of products to be scraped",
+            "default": 10,
+            "sectionCaption": "Product Length",
+            "sectionDescription": "The total number of products to be scraped",
+            "editor": "number",
+            "maximum": 100,
+            "minimum": 5,
+            "unit": "page"
+        },
+        "maxConcurrency": {
+            "title": "Max concurrency",
+            "type": "integer",
+            "description": "The maximum number of search results pages the crawler will load in parallel. A higher number means you will get your results faster, but also it will burn through your available proxies quicker.",
+            "default": 5,
+            "maximum": 100,
+            "minimum": 1
+        },
+        "zipcode": {
+            "title": "USZipcode",
+            "type": "string",
+            "description": "Select us zipcode",
+            "editor": "select",
+            "enum": [
+                99501,
+                20001,
+                33124,
+                60601,
+                21201,
+                10001,
+                41101,
+                97201
+            ],
+            "enumTitles": [
+                "Anchorage",
+                "Washington",
+                "Miami",
+                "Chicago",
+                "Baltimore",
+                "New York",
+                "Cleveland",
+                "Portland"
+            ],
+            "default": 10001
+        }
     },
-    "productLength": {
-      "title": "Total amount of products",
-      "type": "integer",
-      "description": "the total number of products to be scraped",
-      "default": 5,
-      "sectionCaption": "Product Length",
-      "sectionDescription": "The total number of products to be scraped",
-      "editor": "number",
-      "maximum": 100,
-      "minimum": 5,
-      "unit": "page"
-    },
-    "maxConcurrency": {
-      "title": "Max concurrency",
-      "type": "integer",
-      "description": "The maximum number of search results pages the crawler will load in parallel. A higher number means you will get your results faster, but also it will burn through your available proxies quicker.",
-      "default": 5,
-      "maximum": 100,
-      "minimum": 1
-    
-  }
-  },
-  "required": ["keyword"]
+    "required": [
+        "keyword",
+        "zipcode"
+    ]
 }

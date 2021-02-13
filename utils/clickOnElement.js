@@ -13,5 +13,5 @@ module.exports = async function clickOnElement({
   const _x = x !== null ? x : rect.width / 2;
   const _y = y !== null ? y : rect.height / 2;
 
-  await page.mouse.click(rect.left + _x, rect.top + _y, { button: 'middle' });
+  await page.mouse.click(rect.left + _x, rect.top + _y, { button: 'left' });
 };

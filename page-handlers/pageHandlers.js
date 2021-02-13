@@ -1,4 +1,5 @@
 const { PseudoUrl } = require('apify');
+const clickOnElement = require('../utils/clickOnElement');
 const Apify = require('apify');
 const {
   utils: { enqueueLinks },
@@ -71,11 +72,12 @@ async function detailPageHandler({ request, page, requestQueue, ASIN }) {
 
 async function searchResultPageHandler({ request, page, requestQueue }) {
   try {
+    const { productLength } = await Apify.getInput();
     debugger;
     console.log('searchResultPageHandler....');
-    //const urls = await page.$$eval('.s-main-slot div[data-asin] a.a-link-normal', (els) => els.map((el) => el.href));
+
     const queuedInfo = await enqueueLinks({
-      //limit: 10,
+      limit: productLength,
       page,
       requestQueue,
       selector: '.s-main-slot div[data-asin] a.a-link-normal',
@@ -98,8 +100,58 @@ async function searchResultPageHandler({ request, page, requestQueue }) {
   }
 }
 
+async function homePageHandler({ request, page, requestQueue }) {
+  //nav-global-location-popover-link
+
+  try {
+    debugger;
+    const { zipcode, keyword } = await Apify.getInput();
+    await page.waitForSelector('#nav-global-location-popover-link');
+    await page.click('#nav-global-location-popover-link');
+    // await page.waitForSelector('.a-popover .a-popover-modal .a-declarative');
+    await page.waitForSelector('#GLUXZipUpdateInput');
+
+    await page.type('#GLUXZipUpdateInput', zipcode);
+ 
+    await page.click('#GLUXZipUpdate > span > input');
+
+    //  await page.waitForSelector('#GLUXChangePostalCodeLink');
+
+    //  await page.click('#a-autoid-3-announce');
+  
+    await page.waitForSelector('#a-popover-3');
+
+  
+    const continueBtn = await page.$('#a-popover-3 input');
+    debugger;
+    await clickOnElement({ page, elem: continueBtn });
+    debugger;
+    // await page.waitForSelector('#nav-global-location-popover-link', {
+    //   visible: false,
+    // });
+    debugger;
+    await page.waitForSelector('#twotabsearchtextbox');
+    debugger;
+    await page.type('#twotabsearchtextbox', keyword);
+    debugger;
+    await page.click('#nav-search-submit-button');
+    debugger;
+    await page.waitForSelector('div[data-asin]');
+    debugger;
+    await searchResultPageHandler({ request, requestQueue, page });
+  } catch (error) {
+    debugger;
+    const screenshot = await page.screenshot();
+    await Apify.setValue('homePageHandler', screenshot, {
+      contentType: 'image/png',
+    });
+    throw error;
+  }
+}
+
 module.exports = {
   offerPageHandler,
   detailPageHandler,
   searchResultPageHandler,
+  homePageHandler,
 };
