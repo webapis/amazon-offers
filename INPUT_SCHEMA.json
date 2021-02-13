@@ -36,14 +36,14 @@
             "description": "Select us zipcode",
             "editor": "select",
             "enum": [
-                99501,
-                20001,
-                33124,
-                60601,
-                21201,
-                10001,
-                41101,
-                97201
+                "99501",
+                "20001",
+                "33124",
+                "60601",
+                "21201",
+                "10001",
+                "41101",
+                "97201"
             ],
             "enumTitles": [
                 "Anchorage",
@@ -55,7 +55,7 @@
                 "Cleveland",
                 "Portland"
             ],
-            "default": "Washington"
+            "default": "20001"
         }
     },
     "required": [
